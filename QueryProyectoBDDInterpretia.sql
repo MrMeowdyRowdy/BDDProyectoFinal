@@ -1,0 +1,10 @@
+-----------------------------------------------------------------
+-- Script Base de Datos Interpretia - Proyecto Progreso 1
+-- Autores:
+--	 Chasipanta Pablo
+--	 Ocaña Dennis
+--	 Ramos Xavier
+-- Version: 0.1
+-- Fecha de creacion: 04/05/2023
+-- Fecha de actualizacion: 04/05/2023
+-----------------------------------------------------------------
