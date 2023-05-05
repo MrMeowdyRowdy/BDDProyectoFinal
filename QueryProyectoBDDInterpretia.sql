@@ -138,3 +138,18 @@ CONSTRAINT PK_Interprete PRIMARY KEY (interpreteID),
 CONSTRAINT FK_InterpreteEmpleado FOREIGN KEY (CRID) REFERENCES Empleado(CRID),
 CONSTRAINT FK_InterpreteHorario FOREIGN KEY (horario) REFERENCES Horario(horarioID)
 )
+-----------------------------------------------------------------
+--Creacion Tabla Operaciones
+-----------------------------------------------------------------
+CREATE TABLE Operaciones(
+--Se establece las columnas
+opsID INT IDENTITY(1,1) NOT NULL,
+CRID INT NOT NULL,
+horario TINYINT NOT NULL,
+categoria CHAR(3),
+
+--Se establece Constraints
+CONSTRAINT PK_Ops PRIMARY KEY (opsID),
+CONSTRAINT FK_OpsEmpleado FOREIGN KEY (CRID) REFERENCES Empleado(CRID),
+CONSTRAINT FK_OpsHorario FOREIGN KEY (horario) REFERENCES Horario(horarioID)
+)
