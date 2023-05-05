@@ -34,6 +34,7 @@ DROP TABLE IF EXISTS SesionQA
 DROP TABLE IF EXISTS Llamada
 DROP TABLE IF EXISTS TipoRCP
 GO
+
 -----------------------------------------------------------------
 --Creacion de regla para estructura dato mail
 -----------------------------------------------------------------
@@ -125,16 +126,16 @@ fullTime BIT NOT NULL
 --Se establece Constraints
 CONSTRAINT PK_Empleado PRIMARY KEY (CRID),
 CONSTRAINT UK_EmpleadoCRID UNIQUE (CRID),
-CONSTRAINT UK_EmpleadoCRID UNIQUE (tlfContacto),
-CONSTRAINT UK_EmpleadoCRID UNIQUE (emailPersonal),
-CONSTRAINT UK_EmpleadoCRID UNIQUE (emailRackspace)
+CONSTRAINT UK_Empleadotlf UNIQUE (tlfContacto),
+CONSTRAINT UK_EmpleadoMPersonal UNIQUE (emailPersonal),
+CONSTRAINT UK_EmpleadoMRackspace UNIQUE (emailRackspace)
 )
 -----------------------------------------------------------------
 --Creacion Tabla Horario
 -----------------------------------------------------------------
 CREATE TABLE Horario(
 --Se establece las columnas
-horarioID INT IDENTITY(1,1) NOT NULL,
+horarioID TINYINT IDENTITY(1,1) NOT NULL,
 horaInicio TIME(0) NOT NULL,
 horaFin TIME(0) NOT NULL,
 minutosBreak TINYINT NOT NULL
@@ -179,7 +180,7 @@ CONSTRAINT FK_OpsHorario FOREIGN KEY (horario) REFERENCES Horario(horarioID)
 -----------------------------------------------------------------
 --Creacion Tabla QA
 -----------------------------------------------------------------
-CREATE TABLE Operaciones(
+CREATE TABLE QA(
 --Se establece las columnas
 QAID INT IDENTITY(1,1) NOT NULL,
 CRID INT NOT NULL,
