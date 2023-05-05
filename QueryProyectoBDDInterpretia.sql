@@ -19,9 +19,11 @@ GO
 DROP TYPE IF EXISTS mail
 DROP TYPE IF EXISTS identificacion
 DROP TYPE IF EXISTS telefono
+DROP TYPE IF EXISTS percentaje
 DROP RULE IF EXISTS mail_rule
 DROP RULE IF EXISTS identificacion_rule
 DROP RULE IF EXISTS telefono_rule
+DROP RULE IF EXISTS percentaje_rule
 GO
 DROP TABLE IF EXISTS Empleado
 
@@ -50,6 +52,14 @@ AS
 @value LIKE '[0][2-7][0-9][0-9][0-9][0-9][0-9][0-9][0-9]' 
 OR @value LIKE '[0][9][0-9][0-9][0-9][0-9][0-9][0-9][0-9][0-9]';
 GO
+-----------------------------------------------------------------
+--Creacion de regla para estructura dato Percentaje
+-----------------------------------------------------------------
+CREATE RULE percentaje_rule
+AS
+@value <= 100
+AND @value >=0
+GO
 
 -----------------------------------------------------------------
 --Creacion del dato Cedula
@@ -66,6 +76,12 @@ FROM VARCHAR(100);
 -----------------------------------------------------------------
 CREATE TYPE telefono
 FROM VARCHAR(10);
+-----------------------------------------------------------------
+--Creacion del dato Percentaje
+-----------------------------------------------------------------
+CREATE TYPE percentaje
+FROM TINYINT;
+
 -----------------------------------------------------------------
 --Bindeo de la regla para estructura de mail al dato mail
 -----------------------------------------------------------------
@@ -168,4 +184,22 @@ CONSTRAINT PK_QA PRIMARY KEY (QAID),
 CONSTRAINT FK_QAEmpleado FOREIGN KEY (CRID) REFERENCES Empleado(CRID),
 CONSTRAINT FK_QAHorario FOREIGN KEY (horario) REFERENCES Horario(horarioID)
 )
+-----------------------------------------------------------------
+--Creacion Tabla SesionQA
+-----------------------------------------------------------------
+CREATE TABLE SesionQA(
+--Se establece las columnas
+sesionQAID INT IDENTITY(1,1) NOT NULL,
+QAID INT NOT NULL,
+interpreteID INT NOT NULL,
+date DATE NOT NULL,
+horaInicio TIME NOT NULL,
+horaFin TIME NOT NULL,
+porcentaje PERCENTAJE NOT NULL,
+feedback VARCHAR(1000) NULL
 
+--Se establece Constraints
+CONSTRAINT PK_SesionQA PRIMARY KEY (sesionQAID),
+CONSTRAINT FK_SesionQAQA FOREIGN KEY (QAID) REFERENCES QA(QAID),
+CONSTRAINT FK_SesionQAQInterprete FOREIGN KEY (interpreteID) REFERENCES Interprete(interpreteID)
+)
