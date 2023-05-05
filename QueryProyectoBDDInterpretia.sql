@@ -226,5 +226,6 @@ CONSTRAINT FK_LlamadaInterprete FOREIGN KEY (interpreteID) REFERENCES Interprete
 CONSTRAINT CK_LlamadaFecha CHECK (fecha <= GETDATE()),
 CONSTRAINT CK_LlamadahoraInicio CHECK (horaInicio <= CONVERT(TIME(0),GETDATE())),
 CONSTRAINT CK_LlamadahoraFin CHECK (horaFin <= CONVERT(TIME(0),GETDATE())),
-CONSTRAINT CK_LlamadahoraDIFF CHECK (horaInicio < horaFin)
+CONSTRAINT CK_LlamadahoraDIFF CHECK (horaInicio < horaFin),
+CONSTRAINT CK_LlamadaEspecializacion CHECK (especializacion like 'CSV' OR especializacion LIKE 'MED' OR especializacion LIKE 'LAW')
 )
