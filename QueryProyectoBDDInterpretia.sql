@@ -89,6 +89,7 @@ GO
 --Creacion Tabla Empleado
 -----------------------------------------------------------------
 CREATE TABLE Empleado(
+--Se establece las columnas
 CRID INT NOT NULL,
 nroIdentificacion IDENTIFICACION NOT NULL,
 sede VARCHAR(50) NOT NULL,
@@ -99,6 +100,7 @@ emailPersonal MAIL NOT NULL,
 emailRackspace MAIL NOT NULL,
 fullTime BIT NOT NULL
 
+--Se establece Constraints
 CONSTRAINT PK_Empleado PRIMARY KEY (CRID),
 CONSTRAINT UK_EmpleadoCRID UNIQUE (CRID),
 CONSTRAINT UK_EmpleadoCRID UNIQUE (tlfContacto),
@@ -109,10 +111,30 @@ CONSTRAINT UK_EmpleadoCRID UNIQUE (emailRackspace)
 --Creacion Tabla Horario
 -----------------------------------------------------------------
 CREATE TABLE Horario(
+--Se establece las columnas
 horarioID INT IDENTITY(1,1) NOT NULL,
 horaInicio TIME NOT NULL,
 horaFin TIME NOT NULL,
 minutosBreak TINYINT NOT NULL
 
+--Se establece Constraints
 CONSTRAINT PK_Horario PRIMARY KEY (horarioID)
+)
+-----------------------------------------------------------------
+--Creacion Tabla Interprete
+-----------------------------------------------------------------
+CREATE TABLE Interprete(
+--Se establece las columnas
+interpreteID INT IDENTITY(1,1) NOT NULL,
+CRID INT NOT NULL,
+horario TINYINT NOT NULL,
+categoria CHAR(3),
+lenguajesCertificados VARCHAR(100),
+habilidadAlcanzada VARCHAR(20),
+NHO DATE
+
+--Se establece Constraints
+CONSTRAINT PK_Interprete PRIMARY KEY (interpreteID),
+CONSTRAINT FK_InterpreteEmpleado FOREIGN KEY (CRID) REFERENCES Empleado(CRID),
+CONSTRAINT FK_InterpreteHorario FOREIGN KEY (horario) REFERENCES Horario(horarioID)
 )
