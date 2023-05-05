@@ -246,3 +246,21 @@ descripcion varchar(1000)
 --Se establece Constraints
 CONSTRAINT PK_TipoRCP PRIMARY KEY (tipoID),
 )
+-----------------------------------------------------------------
+--Creacion Tabla RCP
+-----------------------------------------------------------------
+CREATE TABLE RCP(
+--Se establece las columnas
+RCPID INT IDENTITY(1,1) NOT NULL,
+interpreteID INT NOT NULL,
+llamadaID INT NOT NULL,
+tipoID INT NOT NULL,
+subcategoria VARCHAR(60) NOT NULL,
+mensaje VARCHAR(1000) NULL
+
+--Se establece Constraints
+CONSTRAINT PK_RCP PRIMARY KEY (RCPID),
+CONSTRAINT FK_RCPInterprete FOREIGN KEY (interpreteID) REFERENCES Interprete(interpreteID),
+CONSTRAINT FK_RCPLlamadaID FOREIGN KEY (llamadaID) REFERENCES Llamada(llamadaID),
+CONSTRAINT FK_RCPTipo FOREIGN KEY (tipoID) REFERENCES tipoRCP(tipoID),
+)
