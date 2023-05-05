@@ -140,8 +140,8 @@ horaFin TIME(0) NOT NULL,
 minutosBreak TINYINT NOT NULL
 
 --Se establece Constraints
-CONSTRAINT PK_Horario PRIMARY KEY (horarioID)
-CONSTRAINT CK_HoraRioHoraInicio CHECK 
+CONSTRAINT PK_Horario PRIMARY KEY (horarioID),
+CONSTRAINT CK_HoraRioHoraInicio CHECK (horaInicio < horaFin)
 )
 -----------------------------------------------------------------
 --Creacion Tabla Interprete
@@ -169,7 +169,7 @@ CREATE TABLE Operaciones(
 opsID INT IDENTITY(1,1) NOT NULL,
 CRID INT NOT NULL,
 horario TINYINT NOT NULL,
-categoria CHAR(3),
+categoria CHAR(3)
 
 --Se establece Constraints
 CONSTRAINT PK_Ops PRIMARY KEY (opsID),
@@ -184,7 +184,7 @@ CREATE TABLE Operaciones(
 QAID INT IDENTITY(1,1) NOT NULL,
 CRID INT NOT NULL,
 horario TINYINT NOT NULL,
-categoria CHAR(3),
+categoria CHAR(3)
 
 --Se establece Constraints
 CONSTRAINT PK_QA PRIMARY KEY (QAID),
@@ -244,7 +244,7 @@ tipoID INT IDENTITY(1,1) NOT NULL,
 descripcion varchar(1000)
 
 --Se establece Constraints
-CONSTRAINT PK_TipoRCP PRIMARY KEY (tipoID),
+CONSTRAINT PK_TipoRCP PRIMARY KEY (tipoID)
 )
 -----------------------------------------------------------------
 --Creacion Tabla RCP
@@ -262,5 +262,5 @@ mensaje VARCHAR(1000) NULL
 CONSTRAINT PK_RCP PRIMARY KEY (RCPID),
 CONSTRAINT FK_RCPInterprete FOREIGN KEY (interpreteID) REFERENCES Interprete(interpreteID),
 CONSTRAINT FK_RCPLlamadaID FOREIGN KEY (llamadaID) REFERENCES Llamada(llamadaID),
-CONSTRAINT FK_RCPTipo FOREIGN KEY (tipoID) REFERENCES tipoRCP(tipoID),
+CONSTRAINT FK_RCPTipo FOREIGN KEY (tipoID) REFERENCES tipoRCP(tipoID)
 )
