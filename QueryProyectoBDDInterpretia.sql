@@ -26,7 +26,13 @@ DROP RULE IF EXISTS telefono_rule
 DROP RULE IF EXISTS percentaje_rule
 GO
 DROP TABLE IF EXISTS Empleado
-
+DROP TABLE IF EXISTS Interprete
+DROP TABLE IF EXISTS Operaciones
+DROP TABLE IF EXISTS QA
+DROP TABLE IF EXISTS Horario
+DROP TABLE IF EXISTS SesionQA
+DROP TABLE IF EXISTS Llamada
+DROP TABLE IF EXISTS TipoRCP
 GO
 -----------------------------------------------------------------
 --Creacion de regla para estructura dato mail
@@ -228,4 +234,15 @@ CONSTRAINT CK_LlamadahoraInicio CHECK (horaInicio <= CONVERT(TIME(0),GETDATE()))
 CONSTRAINT CK_LlamadahoraFin CHECK (horaFin <= CONVERT(TIME(0),GETDATE())),
 CONSTRAINT CK_LlamadahoraDIFF CHECK (horaInicio < horaFin),
 CONSTRAINT CK_LlamadaEspecializacion CHECK (especializacion like 'CSV' OR especializacion LIKE 'MED' OR especializacion LIKE 'LAW')
+)
+-----------------------------------------------------------------
+--Creacion Tabla TipoRCP
+-----------------------------------------------------------------
+CREATE TABLE TipoRCP(
+--Se establece las columnas
+tipoID INT IDENTITY(1,1) NOT NULL,
+descripcion varchar(1000)
+
+--Se establece Constraints
+CONSTRAINT PK_TipoRCP PRIMARY KEY (tipoID),
 )
