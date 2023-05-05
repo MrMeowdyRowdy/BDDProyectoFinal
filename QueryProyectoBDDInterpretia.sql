@@ -265,3 +265,20 @@ CONSTRAINT FK_RCPInterprete FOREIGN KEY (interpreteID) REFERENCES Interprete(int
 CONSTRAINT FK_RCPLlamadaID FOREIGN KEY (llamadaID) REFERENCES Llamada(llamadaID),
 CONSTRAINT FK_RCPTipo FOREIGN KEY (tipoID) REFERENCES tipoRCP(tipoID)
 )
+-----------------------------------------------------------------
+--Creacion Tabla ReporteOPS
+-----------------------------------------------------------------
+CREATE TABLE ReporteOPS(
+--Se establece las columnas
+reporteOPSID INT IDENTITY(1,1) NOT NULL,
+interpreteID INT NOT NULL,
+opsID INT NOT NULL,
+fechaHora DATETIME2(0) NOT NULL,
+mensaje VARCHAR(1000) NOT NULL
+
+--Se establece Constraints
+CONSTRAINT PK_ReporteOPS PRIMARY KEY (reporteOPSID),
+CONSTRAINT FK_ReporteOPSInterprete FOREIGN KEY (interpreteID) REFERENCES Interprete(interpreteID),
+CONSTRAINT FK_ReporteOPSID FOREIGN KEY (opsID) REFERENCES operaciones(opsID),
+CONSTRAINT CK_ReporteOPSFechaHora CHECK (fechaHora <= GETDATE())
+)
