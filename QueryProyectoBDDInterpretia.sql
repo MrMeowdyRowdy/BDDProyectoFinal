@@ -129,12 +129,13 @@ CONSTRAINT UK_EmpleadoCRID UNIQUE (emailRackspace)
 CREATE TABLE Horario(
 --Se establece las columnas
 horarioID INT IDENTITY(1,1) NOT NULL,
-horaInicio TIME NOT NULL,
-horaFin TIME NOT NULL,
+horaInicio TIME(0) NOT NULL,
+horaFin TIME(0) NOT NULL,
 minutosBreak TINYINT NOT NULL
 
 --Se establece Constraints
 CONSTRAINT PK_Horario PRIMARY KEY (horarioID)
+CONSTRAINT CK_HoraRioHoraInicio CHECK 
 )
 -----------------------------------------------------------------
 --Creacion Tabla Interprete
@@ -192,9 +193,9 @@ CREATE TABLE SesionQA(
 sesionQAID INT IDENTITY(1,1) NOT NULL,
 QAID INT NOT NULL,
 interpreteID INT NOT NULL,
-date DATE NOT NULL,
-horaInicio TIME NOT NULL,
-horaFin TIME NOT NULL,
+fecha DATE NOT NULL,
+horaInicio TIME(0) NOT NULL,
+horaFin TIME(0) NOT NULL,
 porcentaje PERCENTAJE NOT NULL,
 feedback VARCHAR(1000) NULL
 
@@ -203,4 +204,27 @@ CONSTRAINT PK_SesionQA PRIMARY KEY (sesionQAID),
 CONSTRAINT FK_SesionQAQA FOREIGN KEY (QAID) REFERENCES QA(QAID),
 CONSTRAINT FK_SesionQAQInterprete FOREIGN KEY (interpreteID) REFERENCES Interprete(interpreteID)
 )
+-----------------------------------------------------------------
+--Creacion Tabla Llamada
+-----------------------------------------------------------------
+CREATE TABLE Llamada(
+--Se establece las columnas
+llamadaID INT IDENTITY(1,1) NOT NULL,
+interpreteID INT NOT NULL,
+fecha DATE NOT NULL,
+horaInicio TIME(0) NOT NULL,
+horaFin TIME(0) NOT NULL,
+empresaCliente VARCHAR(40) NOT NULL,
+proveedor VARCHAR(40) NOT NULL,
+lenguaLEP VARCHAR(30) NOT NULL,
+tipo CHAR(5) NOT NULL,
+especializacion CHAR(3) NOT NULL
 
+--Se establece Constraints
+CONSTRAINT PK_Llamada PRIMARY KEY (llamadaID),
+CONSTRAINT FK_LlamadaInterprete FOREIGN KEY (interpreteID) REFERENCES Interprete(interpreteID),
+CONSTRAINT CK_LlamadaFecha CHECK (fecha <= GETDATE()),
+CONSTRAINT CK_LlamadahoraInicio CHECK (horaInicio <= CONVERT(TIME(0),GETDATE())),
+CONSTRAINT CK_LlamadahoraFin CHECK (horaFin <= CONVERT(TIME(0),GETDATE())),
+CONSTRAINT CK_LlamadahoraDIFF CHECK (horaInicio < horaFin)
+)
