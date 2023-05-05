@@ -31,7 +31,7 @@ GO
 -----------------------------------------------------------------
 CREATE RULE mail_rule
 AS
-@value LIKE '_%@_%._%';
+@value LIKE '_%@_%.__%';
 GO
 -----------------------------------------------------------------
 --Creacion de regla para estructura dato Identificacion
@@ -89,16 +89,30 @@ GO
 --Creacion Tabla Empleado
 -----------------------------------------------------------------
 CREATE TABLE Empleado(
-CRID INT,
-nroIdentificacion IDENTIFICACION,
-sede VARCHAR(50),
-apellido NVARCHAR(30),
-nombre NVARCHAR(30),
-tlfContacto TELEFONO,
-emailPersonal MAIL,
-emailRackspace MAIL,
-fullTime BIT
+CRID INT NOT NULL,
+nroIdentificacion IDENTIFICACION NOT NULL,
+sede VARCHAR(50) NOT NULL,
+apellido NVARCHAR(30) NOT NULL,
+nombre NVARCHAR(30) NOT NULL,
+tlfContacto TELEFONO NOT NULL,
+emailPersonal MAIL NOT NULL,
+emailRackspace MAIL NOT NULL,
+fullTime BIT NOT NULL
 
 CONSTRAINT PK_Empleado PRIMARY KEY (CRID),
 CONSTRAINT UK_EmpleadoCRID UNIQUE (CRID),
+CONSTRAINT UK_EmpleadoCRID UNIQUE (tlfContacto),
+CONSTRAINT UK_EmpleadoCRID UNIQUE (emailPersonal),
+CONSTRAINT UK_EmpleadoCRID UNIQUE (emailRackspace)
+)
+-----------------------------------------------------------------
+--Creacion Tabla Horario
+-----------------------------------------------------------------
+CREATE TABLE Horario(
+horarioID INT IDENTITY(1,1) NOT NULL,
+horaInicio TIME NOT NULL,
+horaFin TIME NOT NULL,
+minutosBreak TINYINT NOT NULL
+
+CONSTRAINT PK_Horario PRIMARY KEY (horarioID)
 )
