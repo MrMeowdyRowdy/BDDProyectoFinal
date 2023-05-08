@@ -33,6 +33,8 @@ DROP TABLE IF EXISTS Horario
 DROP TABLE IF EXISTS SesionQA
 DROP TABLE IF EXISTS Llamada
 DROP TABLE IF EXISTS TipoRCP
+DROP TABLE IF EXISTS RCP
+DROP TABLE IF EXISTS ReporteOPS
 GO
 
 -----------------------------------------------------------------
