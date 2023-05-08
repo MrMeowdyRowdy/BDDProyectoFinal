@@ -4,9 +4,9 @@
 --	 Chasipanta Pablo
 --	 Ocaña Dennis
 --	 Ramos Xavier
--- Version: 0.1
+-- Version: 1.0
 -- Fecha de creacion: 04/05/2023
--- Fecha de actualizacion: 04/05/2023
+-- Fecha de actualizacion: 07/05/2023
 -----------------------------------------------------------------
 --Verificaciones
 -----------------------------------------------------------------
