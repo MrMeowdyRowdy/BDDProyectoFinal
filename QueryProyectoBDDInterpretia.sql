@@ -168,7 +168,8 @@ NHO DATE
 --Se establece Constraints
 CONSTRAINT PK_Interprete PRIMARY KEY (interpreteID),
 CONSTRAINT FK_InterpreteEmpleado FOREIGN KEY (CRID) REFERENCES Empleado(CRID),
-CONSTRAINT FK_InterpreteHorario FOREIGN KEY (horario) REFERENCES Horario(horarioID)
+CONSTRAINT FK_InterpreteHorario FOREIGN KEY (horario) REFERENCES Horario(horarioID),
+CONSTRAINT CK_IntCat CHECK (categoria like 'CSI' OR categoria LIKE 'MSI' OR categoria LIKE 'VRI')
 )
 -----------------------------------------------------------------
 --Creacion Tabla Operaciones
@@ -183,7 +184,8 @@ categoria CHAR(3)
 --Se establece Constraints
 CONSTRAINT PK_Ops PRIMARY KEY (opsID),
 CONSTRAINT FK_OpsEmpleado FOREIGN KEY (CRID) REFERENCES Empleado(CRID),
-CONSTRAINT FK_OpsHorario FOREIGN KEY (horario) REFERENCES Horario(horarioID)
+CONSTRAINT FK_OpsHorario FOREIGN KEY (horario) REFERENCES Horario(horarioID),
+CONSTRAINT CK_OPSCat CHECK (categoria like 'LTL' OR categoria LIKE 'TL')
 )
 -----------------------------------------------------------------
 --Creacion Tabla QA
@@ -198,7 +200,8 @@ categoria CHAR(3)
 --Se establece Constraints
 CONSTRAINT PK_QA PRIMARY KEY (QAID),
 CONSTRAINT FK_QAEmpleado FOREIGN KEY (CRID) REFERENCES Empleado(CRID),
-CONSTRAINT FK_QAHorario FOREIGN KEY (horario) REFERENCES Horario(horarioID)
+CONSTRAINT FK_QAHorario FOREIGN KEY (horario) REFERENCES Horario(horarioID),
+CONSTRAINT CK_QACat CHECK (categoria like 'Trainer' OR categoria LIKE 'QA')
 )
 -----------------------------------------------------------------
 --Creacion Tabla SesionQA
