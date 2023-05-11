@@ -10,11 +10,25 @@
 -----------------------------------------------------------------
 --Verificaciones
 -----------------------------------------------------------------
+
 USE MASTER
 DROP DATABASE IF EXISTS Interpretia
+DROP CERTIFICATE Certificate_encryption
+DROP MASTER KEY
+GO
+CREATE MASTER KEY ENCRYPTION BY PASSWORD = 'InterpretiaBDD.'
+GO
+CREATE CERTIFICATE Certificate_encryption WITH SUBJECT = 'Proteccion de datos'
+GO
 CREATE DATABASE Interpretia
 GO
 USE Interpretia
+CREATE DATABASE ENCRYPTION KEY
+WITH ALGORITHM = AES_256
+ENCRYPTION BY SERVER CERTIFICATE Certificate_encryption;
+GO
+ALTER DATABASE Interpretia
+SET ENCRYPTION ON
 GO
 DROP TYPE IF EXISTS mail
 DROP TYPE IF EXISTS identificacion
@@ -49,13 +63,8 @@ DROP ROLE IF EXISTS [Lector]
 GO
 Use Interpretia
 GO
-DROP MASTER KEY
+
 GO
-CREATE MASTER KEY ENCRYPTION BY PASSWORD = 'InterpretiaBDD.'
-CREATE CERTIFICATE Certificate_encryption WITH SUBJECT = 'Proteccion de datos'
-CREATE SYMMETRIC KEY SymKey_encryption WITH ALGORITHM = AES_256 ENCRYPTION BY CERTIFICATE Certificate_encryption
-
-
 -----------------------------------------------------------------
 --Creacion de regla para estructura dato mail
 -----------------------------------------------------------------
