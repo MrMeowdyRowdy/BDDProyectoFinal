@@ -49,6 +49,11 @@ DROP ROLE IF EXISTS [Lector]
 GO
 Use Interpretia
 GO
+DROP MASTER KEY
+GO
+CREATE MASTER KEY ENCRYPTION BY PASSWORD = 'InterpretiaBDD.'
+CREATE CERTIFICATE Certificate_encryption WITH SUBJECT = 'Proteccion de datos'
+CREATE SYMMETRIC KEY SymKey_encryption WITH ALGORITHM = AES_256 ENCRYPTION BY CERTIFICATE Certificate_encryption
 
 
 -----------------------------------------------------------------
@@ -140,7 +145,7 @@ GO
 CREATE TABLE Empleado(
 --Se establece las columnas
 CRID INT NOT NULL,
-nroIdentificacion IDENTIFICACION NOT NULL,
+nroIdentificacion IDENTIFICACION  NOT NULL,
 sede VARCHAR(50) NOT NULL,
 apellido NVARCHAR(30) NOT NULL,
 nombre NVARCHAR(30) NOT NULL,
