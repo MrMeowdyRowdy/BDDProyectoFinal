@@ -36,6 +36,20 @@ DROP TABLE IF EXISTS TipoRCP
 DROP TABLE IF EXISTS RCP
 DROP TABLE IF EXISTS ReporteOPS
 GO
+DROP LOGIN [QualityAssurance]
+DROP LOGIN [LeadTeamLeader]
+DROP LOGIN [Interprete]
+
+GO
+DROP USER IF EXISTS [QA1]
+DROP USER IF EXISTS [LeadTeamLeader]
+DROP USER IF EXISTS [Interprete]
+GO
+DROP ROLE IF EXISTS [Lector]
+GO
+Use Interpretia
+GO
+
 
 -----------------------------------------------------------------
 --Creacion de regla para estructura dato mail
@@ -138,6 +152,7 @@ CONSTRAINT UK_Empleadotlf UNIQUE (tlfContacto),
 CONSTRAINT UK_EmpleadoMPersonal UNIQUE (emailPersonal),
 CONSTRAINT UK_EmpleadoMRackspace UNIQUE (emailRackspace)
 )
+GO
 -----------------------------------------------------------------
 --Creacion Tabla Horario
 -----------------------------------------------------------------
@@ -152,6 +167,7 @@ minutosBreak TINYINT NOT NULL
 CONSTRAINT PK_Horario PRIMARY KEY (horarioID),
 CONSTRAINT CK_HoraRioHoraInicio CHECK (horaInicio < horaFin)
 )
+GO
 -----------------------------------------------------------------
 --Creacion Tabla Interprete
 -----------------------------------------------------------------
@@ -171,6 +187,7 @@ CONSTRAINT FK_InterpreteEmpleado FOREIGN KEY (CRID) REFERENCES Empleado(CRID),
 CONSTRAINT FK_InterpreteHorario FOREIGN KEY (horario) REFERENCES Horario(horarioID),
 CONSTRAINT CK_IntCat CHECK (categoria like 'CSI' OR categoria LIKE 'MSI' OR categoria LIKE 'VRI')
 )
+GO
 -----------------------------------------------------------------
 --Creacion Tabla Operaciones
 -----------------------------------------------------------------
@@ -187,6 +204,7 @@ CONSTRAINT FK_OpsEmpleado FOREIGN KEY (CRID) REFERENCES Empleado(CRID),
 CONSTRAINT FK_OpsHorario FOREIGN KEY (horario) REFERENCES Horario(horarioID),
 CONSTRAINT CK_OPSCat CHECK (categoria like 'LTL' OR categoria LIKE 'TL')
 )
+GO
 -----------------------------------------------------------------
 --Creacion Tabla QA
 -----------------------------------------------------------------
@@ -203,6 +221,7 @@ CONSTRAINT FK_QAEmpleado FOREIGN KEY (CRID) REFERENCES Empleado(CRID),
 CONSTRAINT FK_QAHorario FOREIGN KEY (horario) REFERENCES Horario(horarioID),
 CONSTRAINT CK_QACat CHECK (categoria like 'Trainer' OR categoria LIKE 'QA')
 )
+GO
 -----------------------------------------------------------------
 --Creacion Tabla SesionQA
 -----------------------------------------------------------------
@@ -222,6 +241,7 @@ CONSTRAINT PK_SesionQA PRIMARY KEY (sesionQAID),
 CONSTRAINT FK_SesionQAQA FOREIGN KEY (QAID) REFERENCES QA(QAID),
 CONSTRAINT FK_SesionQAQInterprete FOREIGN KEY (interpreteID) REFERENCES Interprete(interpreteID)
 )
+GO
 -----------------------------------------------------------------
 --Creacion Tabla Llamada
 -----------------------------------------------------------------
@@ -247,6 +267,7 @@ CONSTRAINT CK_LlamadahoraFin CHECK (horaFin <= CONVERT(TIME(0),GETDATE())),
 CONSTRAINT CK_LlamadahoraDIFF CHECK (horaInicio < horaFin),
 CONSTRAINT CK_LlamadaEspecializacion CHECK (especializacion like 'CSV' OR especializacion LIKE 'MED' OR especializacion LIKE 'LAW')
 )
+GO
 -----------------------------------------------------------------
 --Creacion Tabla TipoRCP
 -----------------------------------------------------------------
@@ -258,6 +279,7 @@ descripcion varchar(1000)
 --Se establece Constraints
 CONSTRAINT PK_TipoRCP PRIMARY KEY (tipoID)
 )
+GO
 -----------------------------------------------------------------
 --Creacion Tabla RCP
 -----------------------------------------------------------------
@@ -276,6 +298,7 @@ CONSTRAINT FK_RCPInterprete FOREIGN KEY (interpreteID) REFERENCES Interprete(int
 CONSTRAINT FK_RCPLlamadaID FOREIGN KEY (llamadaID) REFERENCES Llamada(llamadaID),
 CONSTRAINT FK_RCPTipo FOREIGN KEY (tipoID) REFERENCES tipoRCP(tipoID)
 )
+GO
 -----------------------------------------------------------------
 --Creacion Tabla ReporteOPS
 -----------------------------------------------------------------
@@ -293,3 +316,83 @@ CONSTRAINT FK_ReporteOPSInterprete FOREIGN KEY (interpreteID) REFERENCES Interpr
 CONSTRAINT FK_ReporteOPSID FOREIGN KEY (opsID) REFERENCES operaciones(opsID),
 CONSTRAINT CK_ReporteOPSFechaHora CHECK (fechaHora <= GETDATE())
 )
+GO
+-----------------------------------------------------------------
+--Creacion de Rol Lector
+-----------------------------------------------------------------
+CREATE ROLE [Lector]
+GO
+ALTER AUTHORIZATION ON SCHEMA::[db_datareader] TO [Lector]
+GO
+
+-----------------------------------------------------------------
+--Creacion de logins
+-----------------------------------------------------------------
+USE [master]
+GO
+CREATE LOGIN [QualityAssurance] WITH PASSWORD=N'QA123.', DEFAULT_DATABASE=[Interpretia], DEFAULT_LANGUAGE=[us_english], CHECK_EXPIRATION=ON, CHECK_POLICY=ON
+GO
+CREATE LOGIN [LeadTeamLeader] WITH PASSWORD=N'LeadTL123.' MUST_CHANGE, DEFAULT_DATABASE=[Interpretia], DEFAULT_LANGUAGE=[us_english], CHECK_EXPIRATION=ON, CHECK_POLICY=ON
+GO
+CREATE LOGIN [Interprete] WITH PASSWORD=N'Interpretia123.' MUST_CHANGE, DEFAULT_DATABASE=[Interpretia], DEFAULT_LANGUAGE=[us_english], CHECK_EXPIRATION=ON, CHECK_POLICY=ON
+GO
+
+-----------------------------------------------------------------
+--Creacion de Users - QA
+-----------------------------------------------------------------
+USE [Interpretia]
+GO
+CREATE USER [QA1] FOR LOGIN [QualityAssurance]
+GO
+ALTER ROLE [Lector] ADD MEMBER [QA1]
+GO
+GRANT INSERT ON OBJECT::[dbo].[SesionQA] TO QA1
+GRANT UPDATE ON OBJECT::[dbo].[SesionQA] TO QA1
+
+-----------------------------------------------------------------
+--Creacion de Users - LTL
+-----------------------------------------------------------------
+CREATE USER [LeadTeamLeader] FOR LOGIN [LeadTeamLeader]
+GO
+USE [Interpretia]
+GO
+ALTER ROLE [Lector] ADD MEMBER [LeadTeamLeader]
+GO
+--Permisos en tabla empleado
+GRANT INSERT ON OBJECT::[dbo].[Empleado] TO [LeadTeamLeader]
+GRANT UPDATE ON OBJECT::[dbo].[Empleado] TO [LeadTeamLeader]
+--Permisos en la tabla horario
+GRANT INSERT ON OBJECT::[dbo].[Horario] TO [LeadTeamLeader]
+GRANT UPDATE ON OBJECT::[dbo].[Horario] TO [LeadTeamLeader]
+--Permisos en la tabla Interprete
+GRANT INSERT ON OBJECT::[dbo].[Interprete] TO [LeadTeamLeader]
+GRANT UPDATE ON OBJECT::[dbo].[Interprete] TO [LeadTeamLeader]
+--Permisos en la tabla Llamada
+GRANT INSERT ON OBJECT::[dbo].[Llamada] TO [LeadTeamLeader]
+GRANT UPDATE ON OBJECT::[dbo].[Llamada] TO [LeadTeamLeader]
+--Permisos en la tabla OPS
+GRANT INSERT ON OBJECT::[dbo].[Operaciones] TO [LeadTeamLeader]
+GRANT UPDATE ON OBJECT::[dbo].[Operaciones] TO [LeadTeamLeader]
+--Permisos en la tabla QA
+GRANT INSERT ON OBJECT::[dbo].[QA] TO [LeadTeamLeader]
+GRANT UPDATE ON OBJECT::[dbo].[QA] TO [LeadTeamLeader]
+--Permisos en la tabla ReporteOPS
+GRANT INSERT ON OBJECT::[dbo].[ReporteOPS] TO [LeadTeamLeader]
+GRANT UPDATE ON OBJECT::[dbo].[ReporteOPS] TO [LeadTeamLeader]
+--Permisos en la tabla TipoRCP
+GRANT INSERT ON OBJECT::[dbo].[TipoRCP] TO [LeadTeamLeader]
+GRANT UPDATE ON OBJECT::[dbo].[TipoRCP] TO [LeadTeamLeader]
+
+-----------------------------------------------------------------
+--Creacion de Users - Interprete
+-----------------------------------------------------------------
+CREATE USER [Interprete] FOR LOGIN [Interprete]
+GO
+USE [Interpretia]
+GO
+ALTER ROLE [Lector] ADD MEMBER [Interprete]
+GO
+--Permisos en la tabla Llamada
+GRANT INSERT ON OBJECT::[dbo].[Llamada] TO [Interprete]
+GRANT UPDATE ON OBJECT::[dbo].[Llamada] TO [Interprete]
+
