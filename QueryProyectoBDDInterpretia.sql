@@ -4,7 +4,7 @@
 --	 Chasipanta Pablo
 --	 Ocaña Dennis
 --	 Ramos Xavier
--- Version: 1.0
+-- Version: 1.5
 -- Fecha de creacion: 04/05/2023
 -- Fecha de actualizacion: 07/05/2023
 -----------------------------------------------------------------
@@ -69,7 +69,11 @@ CREATE RULE identificacion_rule AS @value LIKE '[2][0-4][0-5][0-9][0-9][0-9][0-9
     AND '5'
     AND CAST(SUBSTRING(@value, 10, 1) AS INT) = (
         (
-            2 * CAST(SUBSTRING(@value, 1, 1) AS INT) + 1 * CAST(SUBSTRING(@value, 2, 1) AS INT) + 2 * CAST(SUBSTRING(@value, 3, 1) AS INT) + 1 * CAST(SUBSTRING(@value, 4, 1) AS INT) + 2 * CAST(SUBSTRING(@value, 5, 1) AS INT) + 1 * CAST(SUBSTRING(@value, 6, 1) AS INT) + 2 * CAST(SUBSTRING(@value, 7, 1) AS INT) + 1 * CAST(SUBSTRING(@value, 8, 1) AS INT) + 2 * CAST(SUBSTRING(@value, 9, 1) AS INT)
+            2 * CAST(SUBSTRING(@value, 1, 1) AS INT) + 1 * 
+			CAST(SUBSTRING(@value, 2, 1) AS INT) + 2 * CAST(SUBSTRING(@value, 3, 1) AS INT) 
+			+ 1 * CAST(SUBSTRING(@value, 4, 1) AS INT) + 2 * CAST(SUBSTRING(@value, 5, 1) AS INT) 
+			+ 1 * CAST(SUBSTRING(@value, 6, 1) AS INT) + 2 * CAST(SUBSTRING(@value, 7, 1) AS INT) 
+			+ 1 * CAST(SUBSTRING(@value, 8, 1) AS INT) + 2 * CAST(SUBSTRING(@value, 9, 1) AS INT)
         ) % 10
     )
 GO
