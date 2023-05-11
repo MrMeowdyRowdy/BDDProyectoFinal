@@ -49,12 +49,17 @@ DROP ROLE IF EXISTS [Lector]
 GO
 Use Interpretia
 GO
-DROP MASTER KEY
+
 GO
 CREATE MASTER KEY ENCRYPTION BY PASSWORD = 'InterpretiaBDD.'
 CREATE CERTIFICATE Certificate_encryption WITH SUBJECT = 'Proteccion de datos'
-CREATE SYMMETRIC KEY SymKey_encryption WITH ALGORITHM = AES_256 ENCRYPTION BY CERTIFICATE Certificate_encryption
-
+CREATE DATABASE ENCRYPTION KEY
+WITH ALGORITHM = AES_256
+ENCRYPTION BY SERVER CERTIFICATE Certificate_encryption;
+GO
+ALTER DATABASE Interpretia
+SET ENCRYPTION ON
+GO
 
 -----------------------------------------------------------------
 --Creacion de regla para estructura dato mail
