@@ -7,7 +7,7 @@ CREATE LOGIN [QualityAssurance] WITH PASSWORD=N'QA123.', DEFAULT_DATABASE=[Inter
 GO
 CREATE LOGIN [LeadTeamLeader] WITH PASSWORD=N'LeadTL123.' MUST_CHANGE, DEFAULT_DATABASE=[Interpretia], DEFAULT_LANGUAGE=[us_english], CHECK_EXPIRATION=ON, CHECK_POLICY=ON
 GO
-CREATE LOGIN [Interprete] WITH PASSWORD=N'LeadTL123.' MUST_CHANGE, DEFAULT_DATABASE=[Interpretia], DEFAULT_LANGUAGE=[us_english], CHECK_EXPIRATION=ON, CHECK_POLICY=ON
+CREATE LOGIN [Interprete] WITH PASSWORD=N'Interpretia123.' MUST_CHANGE, DEFAULT_DATABASE=[Interpretia], DEFAULT_LANGUAGE=[us_english], CHECK_EXPIRATION=ON, CHECK_POLICY=ON
 GO
 
 -----------------------------------------------------------------
@@ -40,7 +40,7 @@ GRANT UPDATE ON OBJECT::[dbo].[Horario] TO [LeadTeamLeader]
 --Permisos en la tabla Interprete
 GRANT INSERT ON OBJECT::[dbo].[Interprete] TO [LeadTeamLeader]
 GRANT UPDATE ON OBJECT::[dbo].[Interprete] TO [LeadTeamLeader]
---Permisos en la tabla Interprete
+--Permisos en la tabla Llamada
 GRANT INSERT ON OBJECT::[dbo].[Llamada] TO [LeadTeamLeader]
 GRANT UPDATE ON OBJECT::[dbo].[Llamada] TO [LeadTeamLeader]
 --Permisos en la tabla OPS
@@ -52,6 +52,19 @@ GRANT UPDATE ON OBJECT::[dbo].[QA] TO [LeadTeamLeader]
 --Permisos en la tabla ReporteOPS
 GRANT INSERT ON OBJECT::[dbo].[ReporteOPS] TO [LeadTeamLeader]
 GRANT UPDATE ON OBJECT::[dbo].[ReporteOPS] TO [LeadTeamLeader]
---Permisos en la tabla ReporteOPS
+--Permisos en la tabla TipoRCP
 GRANT INSERT ON OBJECT::[dbo].[TipoRCP] TO [LeadTeamLeader]
 GRANT UPDATE ON OBJECT::[dbo].[TipoRCP] TO [LeadTeamLeader]
+
+-----------------------------------------------------------------
+--Creacion de Users - Interprete
+-----------------------------------------------------------------
+CREATE USER [Interprete] FOR LOGIN [Interprete]
+GO
+USE [Interpretia]
+GO
+ALTER ROLE [Lector] ADD MEMBER [Interprete]
+GO
+--Permisos en la tabla Llamada
+GRANT INSERT ON OBJECT::[dbo].[Llamada] TO [Interprete]
+GRANT UPDATE ON OBJECT::[dbo].[Llamada] TO [Interprete]
