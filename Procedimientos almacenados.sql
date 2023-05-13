@@ -251,3 +251,163 @@ SET @FECHALLAMADA = (SELECT L.fecha FROM Llamada L WHERE L.llamadaID=@IDLLAMADA)
 END
 
 GO
+
+-----------------------------------------------------------------
+--Creacion Procedimiento para historial de llamadas por intérprete en un periodo dado
+-----------------------------------------------------------------
+
+CREATE PROC historialPorInterpretePorFechas_sp
+
+@fechaInicia DATE,
+@fechaFinal DATE,
+@CRID INT
+
+AS
+BEGIN
+
+	DECLARE @interpreteID INT
+	IF EXISTS (SELECT I.interpreteID FROM Interprete I WHERE I.CRID=@CRID)
+	BEGIN
+		SET @interpreteID = (SELECT I.interpreteID FROM Interprete I WHERE I.CRID=@CRID)
+	END
+	ELSE
+	BEGIN
+		RAISERROR('Error CRID ingresado no existe',16,10)
+		RETURN
+	END
+	IF(@fechaInicia>@fechaFinal)
+	BEGIN
+		RAISERROR('Error la fecha de inicio debe ser menor a la fecha final',16,10)
+		RETURN
+	END
+
+	SELECT I.CRID AS 'Código empleado',
+	E.nombre+' '+E.apellido AS 'Nombre del interprete',
+	L.empresaCliente AS 'Empresa', L.tipo AS 'Tipo de llamada',
+	L.horaInicio AS 'Hora inicial', L.horaFin AS 'Hora final', L.fecha AS 'Fecha de la llamada' 
+	FROM Llamada L
+	INNER JOIN Interprete I ON L.interpreteID=L.interpreteID
+	INNER JOIN Empleado E ON I.CRID=E.CRID
+	WHERE I.interpreteID=@interpreteID and L.fecha BETWEEN @fechaInicia AND @fechaFinal
+END
+
+GO
+
+-----------------------------------------------------------------
+--Creacion Procedimiento para horarios planificados por intérprete
+-----------------------------------------------------------------
+
+CREATE PROC horariosPorInterprete_sp
+
+@CRID INT
+
+AS
+BEGIN
+
+	DECLARE @interpreteID INT
+	IF EXISTS (SELECT I.interpreteID FROM Interprete I WHERE I.CRID=@CRID)
+	BEGIN
+		SET @interpreteID = (SELECT I.interpreteID FROM Interprete I WHERE I.CRID=@CRID)
+	END
+	ELSE
+	BEGIN
+		RAISERROR('Error CRID ingresado no existe',16,10)
+		RETURN
+	END
+
+	SELECT I.CRID AS 'Código empleado', I.horario AS 'Horario asignado',
+	H.horaInicio AS 'Hora de inicio', H.horaFin AS 'Hora de finalización', H.minutosBreak AS 'Minutos de break',
+	E.nombre+' '+E.apellido AS 'Nombre del interprete' FROM Interprete I
+	INNER JOIN Horario H ON I.horario=H.horarioID
+	INNER JOIN Empleado E ON I.CRID=E.CRID
+	WHERE I.interpreteID=@interpreteID
+END
+
+GO
+
+-----------------------------------------------------------------
+--Creacion Procedimiento para calificaciones de los intérpretes
+-----------------------------------------------------------------
+
+CREATE PROC calificacionPorInterprete_sp
+
+@CRID INT
+
+AS
+BEGIN
+
+	DECLARE @interpreteID INT
+	IF EXISTS (SELECT I.interpreteID FROM Interprete I WHERE I.CRID=@CRID)
+	BEGIN
+		SET @interpreteID = (SELECT I.interpreteID FROM Interprete I WHERE I.CRID=@CRID)
+	END
+	ELSE
+	BEGIN
+		RAISERROR('Error CRID ingresado no existe',16,10)
+		RETURN
+	END
+
+	SELECT I.CRID AS 'Código empleado',
+	S.porcentaje AS 'Porcentaje de calificación', S.feedback AS 'Feedback',
+	E.nombre+' '+E.apellido AS 'Nombre del interprete' FROM Interprete I
+	INNER JOIN SesionQA S ON I.interpreteID=S.interpreteID
+	INNER JOIN Empleado E ON I.CRID=E.CRID
+	WHERE I.interpreteID=@interpreteID
+END
+
+GO
+
+-----------------------------------------------------------------
+--Creacion Procedimiento para registro de llamadas atendidass
+-----------------------------------------------------------------
+
+CREATE VIEW registroLlamadasAtendidas_vw
+
+AS
+
+	SELECT L.empresaCliente AS 'Empresa', L.tipo AS 'Tipo de llamada',
+	L.horaInicio AS 'Hora inicial', L.horaFin AS 'Hora final', L.fecha AS 'Fecha de la llamada',
+	E.nombre+' '+E.apellido AS 'Nombre del interprete que atendió la llamada'
+	FROM Llamada L
+	INNER JOIN Interprete I ON L.interpreteID = I.interpreteID
+	INNER JOIN Empleado E ON I.CRID = E.CRID
+
+GO
+
+-----------------------------------------------------------------
+--Creacion Procedimiento para registro de RPC
+-----------------------------------------------------------------
+
+CREATE VIEW registroRCP_vw
+
+AS
+
+	SELECT R.mensaje AS 'Mensaje del reporte', R.subcategoria AS 'Subcategoría del reporte',
+	TR.descripcion AS 'Descripción del reporte',
+	L.empresaCliente AS 'Empresa reportada', L.fecha AS 'Fecha de la llamada reportada', L.tipo AS 'Tipo de llamada reportada'
+	FROM RCP R
+	INNER JOIN TipoRCP TR ON R.tipoID = TR.tipoID
+	INNER JOIN Interprete I ON R.interpreteID = I.interpreteID
+	INNER JOIN Empleado E ON I.CRID = E.CRID
+	INNER JOIN Llamada L ON  R.llamadaID = L.llamadaID
+
+GO
+
+-----------------------------------------------------------------
+--Creacion Procedimiento para evaluación de interpretación QA
+-----------------------------------------------------------------
+
+CREATE VIEW evaluacionInterpretacionQA_vw
+
+AS
+
+	SELECT Q.QAID AS 'Id QA que realizo la evaluación', Q.categoria AS 'Categoría del QA',
+	S.fecha AS 'Fecha de la evaluación', S.feedback AS 'Feedback de la evaluación', S.porcentaje AS 'Calificación en porcentaje',
+	E.nombre+' '+E.apellido AS 'Nombre del interprete evaluado'
+	FROM SesionQA S
+	INNER JOIN QA Q ON S.QAID = Q.QAID
+	INNER JOIN Interprete I ON I.interpreteID = S.interpreteID
+	INNER JOIN Empleado E ON I.CRID = E.CRID
+
+GO
+
