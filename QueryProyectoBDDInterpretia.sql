@@ -1039,12 +1039,17 @@ SELECT * FROM TipoRCP
 --Inserts RCP - SUBCAT DEBE SER CORRESPONDIENTE SEGUN EL DOC
 -----------------------------------------------------------------
 EXEC InsertarRCP_sp 174498,1,1,'Llamada de LEP.','LEP presiono el boton llamar del dispositivo sin querer'
+EXEC InsertarRCP_sp 170842,2,2,'Llamada de LEP.',' Demasiada interferencia.'
+EXEC InsertarRCP_sp 174498,1,3,'Llamada de LEP.','El cliente no volvió (se esperó según protocolo)'
+
 SELECT * FROM RCP
 
 -----------------------------------------------------------------
 --Inserts ReporteOPS
 -----------------------------------------------------------------
 EXEC InsertarReporteOPS_sp 174498,1,'05/13/2023 10:30',''
+EXEC InsertarReporteOPS_sp 170842,2,'02/04/2023 07:12:56',''
+EXEC InsertarReporteOPS_sp 174498,1,'02/04/2023 12:54:02',''
 SELECT * FROM ReporteOPS
 
 -----------------------------------------------------------------
