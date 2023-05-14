@@ -358,7 +358,7 @@ END
 GO
 
 -----------------------------------------------------------------
---Creacion Procedimiento para registro de llamadas atendidass
+--Creacion Vista para registro de llamadas atendidass
 -----------------------------------------------------------------
 
 CREATE VIEW registroLlamadasAtendidas_vw
@@ -375,7 +375,7 @@ AS
 GO
 
 -----------------------------------------------------------------
---Creacion Procedimiento para registro de RPC
+--Creacion Vista para registro de RPC
 -----------------------------------------------------------------
 
 CREATE VIEW registroRCP_vw
@@ -394,7 +394,7 @@ AS
 GO
 
 -----------------------------------------------------------------
---Creacion Procedimiento para evaluación de interpretación QA
+--Creacion Vista para evaluación de interpretación QA
 -----------------------------------------------------------------
 
 CREATE VIEW evaluacionInterpretacionQA_vw
@@ -412,30 +412,58 @@ AS
 GO
 
 -----------------------------------------------------------------
---Creacion Procedimiento para evaluación de interpretación QA
+--Creacion Trigger para Generación de un RCP
 -----------------------------------------------------------------
 
-CREATE TRIGGER tr_EnviarEmail
-   ON  Empleado 
+CREATE TRIGGER tr_NotificacionRCP
+   ON  RCP 
    AFTER INSERT
 AS 
 BEGIN
+
     SET NOCOUNT ON;
-
-    DECLARE @body NVARCHAR(MAX);
-    SET @body = 'A new record has been inserted into MyTable.';
-
     EXEC msdb.dbo.sp_send_dbmail
         @profile_name = 'AdminCorreo',
         @recipients = 'notificacionesBDgrupo6@hotmail.com',
-        @subject = 'New record inserted into MyTable',
-        @body = @body,
+        @subject = 'Generación de RCP',
+        @body = 'Un nuevo RCP ha sido creado',
 		@body_format = 'HTML'
-
 END 
 
 GO
 
---EXEC InsertarEmpleado_sp '1721645917','quito','ramos','xavier','0998716545','xavi@gmail.com',1
---DELETE FROM Empleado
+-----------------------------------------------------------------
+--Creacion Trigger para Nota menor a 70%
+-----------------------------------------------------------------
+
+CREATE TRIGGER tr_notaMenor70
+   ON  SesionQA 
+   AFTER INSERT
+AS 
+BEGIN
+	DECLARE @NOTA TINYINT
+	SET @NOTA = (SELECT porcentaje FROM inserted)
+	DECLARE @INTERPRETE INT
+	SET @INTERPRETE = (SELECT interpreteID FROM inserted)
+	DECLARE @CRID INT
+	SET @CRID = (SELECT CRID FROM Interprete)
+	IF(@NOTA<70)
+	DECLARE @body VARCHAR(1000)
+	SET @body = CONCAT('Atención el interprete ',@CRID,' ha obtenido una calificación menor a 70')
+	BEGIN
+		SET NOCOUNT ON;
+		EXEC msdb.dbo.sp_send_dbmail
+			@profile_name = 'AdminCorreo',
+			@recipients = 'notificacionesBDgrupo6@hotmail.com',
+			@subject = 'Baja nota de interprete',
+			@body = @body,
+			@body_format = 'HTML'
+	END
+    
+END 
+
+GO
+
+
+
 

@@ -1,6 +1,18 @@
 USE msdb;
 GO
 
+IF EXISTS (SELECT name FROM dbo.sysmail_profile WHERE name = 'AdminCorreo')
+BEGIN
+	EXECUTE dbo.sysmail_delete_profile_sp
+    @profile_name = 'AdminCorreo';
+END
+
+IF EXISTS (SELECT name FROM dbo.sysmail_account WHERE name = 'OperadorCorreo')
+BEGIN
+	EXECUTE dbo.sysmail_delete_account_sp
+    @account_name = 'OperadorCorreo';
+END
+
 EXECUTE dbo.sysmail_add_account_sp
     @account_name = 'OperadorCorreo',
     @email_address = 'notificacionesBDgrupo6@hotmail.com',
