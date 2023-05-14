@@ -288,7 +288,7 @@ BEGIN
 	FROM Llamada L
 	INNER JOIN Interprete I ON L.interpreteID=L.interpreteID
 	INNER JOIN Empleado E ON I.CRID=E.CRID
-	WHERE I.interpreteID=@interpreteID and L.fecha BETWEEN @fechaInicia AND @fechaFinal
+	WHERE I.interpreteID=@interpreteID and  @fechaInicia < L.fecha and L.fecha < @fechaFinal
 END
 
 GO
@@ -510,7 +510,6 @@ BEGIN
 	BEGIN
 		PRINT('1. Planificación de llamadas')
 		PRINT('Sintaxis: ')
-
 	END
 	IF @opcion = 2
 	BEGIN
@@ -535,14 +534,17 @@ BEGIN
 	IF @opcion = 7
 	BEGIN
 		PRINT('7. Historial de llamadas por intérprete en un periodo dado')
+		EXEC historialPorInterpretePorFechas_sp '01/05/2022','30/05/2022',174498
 	END
 	IF @opcion = 8
 	BEGIN
 		PRINT('8. Horarios planificados por intérprete')
+		EXEC horariosPorInterprete_sp 174498
 	END
 	IF @opcion = 9
 	BEGIN
 		PRINT('9. Calificaciones de los intérpretes')
+		EXEC calificacionPorInterprete_sp 174498
 	END
 
 END

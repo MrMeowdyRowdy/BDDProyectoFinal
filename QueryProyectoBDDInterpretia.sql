@@ -780,7 +780,7 @@ BEGIN
 	FROM Llamada L
 	INNER JOIN Interprete I ON L.interpreteID=L.interpreteID
 	INNER JOIN Empleado E ON I.CRID=E.CRID
-	WHERE I.interpreteID=@interpreteID and L.fecha BETWEEN @fechaInicia AND @fechaFinal
+	WHERE I.interpreteID=@interpreteID and  @fechaInicia < L.fecha and L.fecha < @fechaFinal
 END
 
 GO
