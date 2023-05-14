@@ -916,6 +916,8 @@ GO
 -----------------------------------------------------------------
 --Creacion Trigger para Generación de un RCP
 -----------------------------------------------------------------
+DROP PROC IF EXISTS tr_NotificacionRCP
+GO
 
 CREATE TRIGGER tr_NotificacionRCP
    ON  RCP 
@@ -937,6 +939,8 @@ GO
 -----------------------------------------------------------------
 --Creacion Trigger para Nota menor a 70%
 -----------------------------------------------------------------
+DROP PROC IF EXISTS tr_notaMenor70
+GO
 
 CREATE TRIGGER tr_notaMenor70
    ON  SesionQA 
