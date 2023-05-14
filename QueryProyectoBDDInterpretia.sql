@@ -974,5 +974,6 @@ GO
 -----------------------------------------------------------------
 --Inserts Empleado
 -----------------------------------------------------------------
-INSERT INTO Empleado (CRID, nroIdentificacion,sede,apellido,nombre,tlfContacto,emailPersonal,emailRackspace,fullTime)
-VALUES()
+EXEC InsertarEmpleado_sp '1721154498','Ecuador','Ocaña','Dennis','0996389675','dennisocana@gmail.com','0'
+EXEC InsertarEmpleado_sp '1721154498','Ecuador','Ocaña','Dennis','0996389675','dennisocana@gmail.com','0'
+SELECT * FROM Empleado
