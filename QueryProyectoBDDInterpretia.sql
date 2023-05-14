@@ -1014,18 +1014,25 @@ SELECT * FROM Llamada
 --Inserts Operaciones - eliminar luego categoria puede ser LTL o TL
 -----------------------------------------------------------------
 EXEC InsertarOperaciones_sp 174498,1,'LTL'
+EXEC InsertarOperaciones_sp 176140,2,'TL'
+EXEC InsertarOperaciones_sp 175917,4,'LTL'
 SELECT * FROM Operaciones
 
 -----------------------------------------------------------------
 --Inserts QA - puede ser QA O trainer en categoria
 -----------------------------------------------------------------
 EXEC InsertarQA_sp 174498,1,'QA'
+EXEC InsertarQA_sp 176140,2,'QA'
+EXEC InsertarQA_sp 175917,4,'QA'
 SELECT * FROM QA
 
 -----------------------------------------------------------------
 --Inserts TipoRCP - REVISAR DOCUMENTO PARA ESTO SOLO LOS MAYORES SE PONE
 -----------------------------------------------------------------
 EXEC InsertarTipoRCP_sp 'Problemas al inicio de la llamada'
+EXEC InsertarTipoRCP_sp 'roblemas de audio/video'
+EXEC InsertarTipoRCP_sp 'La conversación termino de manera inesperada'
+EXEC InsertarTipoRCP_sp 'no se interpretó la llamada'
 SELECT * FROM TipoRCP
 
 -----------------------------------------------------------------
