@@ -989,3 +989,9 @@ SELECT * FROM Horario
 -----------------------------------------------------------------
 EXEC InsertarInterprete_sp 174498,1,'VRI','Español - Ingles','Gold Class','12/07/2022'
 SELECT * FROM Interprete
+
+-----------------------------------------------------------------
+--Inserts Llamada - eliminar luego Proveedor pueden ser voice for help, pacific interpreters o LLS
+-----------------------------------------------------------------
+EXEC InsertarLlamada_sp 174498,'05/05/2022','10:01:09','10:30:49','St. Agnes Hospital', 'Voice for Help', 'Español', 'Video', 'MED'
+SELECT * FROM Llamada
