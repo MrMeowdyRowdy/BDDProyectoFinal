@@ -1007,3 +1007,14 @@ SELECT * FROM Operaciones
 -----------------------------------------------------------------
 EXEC InsertarQA_sp 174498,3,'QA'
 SELECT * FROM QA
+
+-----------------------------------------------------------------
+--Inserts TipoRCP - REVISAR DOCUMENTO PARA ESTO SOLO LOS MAYORES SE PONE
+-----------------------------------------------------------------
+EXEC InsertarTipoRCP_sp 'Problemas al inicio de la llamada'
+SELECT * FROM TipoRCP
+
+-----------------------------------------------------------------
+--Inserts RCP
+-----------------------------------------------------------------
+EXEC InsertarRCP_sp
