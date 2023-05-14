@@ -985,5 +985,7 @@ EXEC InsertarHorario_sp '10:00','14:00','15'
 SELECT * FROM Horario
 
 -----------------------------------------------------------------
---Inserts Horario
+--Inserts Interprete - borrar luego puede ser gold class, rookie o silver class
 -----------------------------------------------------------------
+EXEC InsertarInterprete_sp 174498,1,'VRI','Español - Ingles','Gold Class','12/07/2022'
+SELECT * FROM Interprete
