@@ -998,7 +998,7 @@ SELECT * FROM Horario
 -----------------------------------------------------------------
 EXEC InsertarInterprete_sp 174498,1,'VRI','Español - Ingles','Gold Class','12/07/2022'
 EXEC InsertarInterprete_sp 175917,4,'VRI','Español - Ingles - Portugués','Gold Class','05/06/2020'
-EXEC InsertarInterprete_sp 170842,2,'VRI','Español - Ingles','Gold Class','15/12/2020'
+EXEC InsertarInterprete_sp 170842,2,'VRI','Español - Ingles','Gold Class','12/15/2020'
 EXEC InsertarInterprete_sp 176140,3,'VRI','Español - Ingles','Gold Class','03/04/2018'
 SELECT * FROM Interprete
 
@@ -1052,3 +1052,96 @@ SELECT * FROM ReporteOPS
 -----------------------------------------------------------------
 EXEC InsertarSesionQA_sp 1,174498,'05/10/2023','14:00:23','14:17:31',95,'Interprete se desenvuelve de buena manera, se recomienda pequeños ajustes en sus postura'
 SELECT * FROM SesionQA
+
+-----------------------------------------------------------------
+--Creacion Procedimiento para mostrar el menú
+-----------------------------------------------------------------
+DROP PROC IF EXISTS MostrarMenu_sp
+GO
+
+CREATE PROC MostrarMenu_sp
+
+AS
+BEGIN
+
+	PRINT('Menú de procedimientos INTERPRETIA')
+	PRINT('Ámbitos a implementar:')
+	PRINT('1. Planificación de llamadas')
+	PRINT('2. Registro de llamadas atendidas')
+	PRINT('3. Registro de RPC ')
+	PRINT('4. Evaluación de interpretación QA')
+	PRINT('Notificación:')
+	PRINT('5. Generación de un RCP')
+	PRINT('6. Nota menor a 70%')
+	PRINT('Ámbitos a implementar:')
+	PRINT('7. Historial de llamadas por intérprete en un periodo dado')
+	PRINT('8. Horarios planificados por intérprete')
+	PRINT('9. Calificaciones de los intérpretes')
+
+END
+
+GO
+
+-----------------------------------------------------------------
+--Creacion Procedimiento para ejecutar opciones del menú
+-----------------------------------------------------------------
+DROP PROC IF EXISTS MenuEjecutable_sp
+GO
+
+CREATE PROC MenuEjecutable_sp
+
+@opcion TINYINT
+
+AS
+BEGIN
+	
+	IF @opcion = 1
+	BEGIN
+		PRINT('1. Planificación de llamadas')
+		EXEC InsertarLlamada_sp 174498,'01/05/2022','10:01:09','11:30:49','St. Agnes Hospital', 'Voice for Help', 'Español', 'Video', 'MED'
+	END
+	IF @opcion = 2
+	BEGIN
+		PRINT('2. Registro de llamadas atendidas')	
+		SELECT * FROM registroLlamadasAtendidas_vw
+	END
+	IF @opcion = 3
+	BEGIN
+		PRINT('3. Registro de RPC ')
+		SELECT * FROM registroRCP_vw
+	END
+	IF @opcion = 4
+	BEGIN
+		PRINT('4. Evaluación de interpretación QA')
+		SELECT * FROM evaluacionInterpretacionQA_vw	
+	END
+	IF @opcion = 5
+	BEGIN
+		PRINT('5. Generación de un RCP')
+		EXEC InsertarRCP_sp 174498,1,1,'Llamada de LEP.','LEP presiono el boton llamar del dispositivo intensionadamente'
+	END
+	IF @opcion = 6
+	BEGIN
+		PRINT('6. Nota menor a 70%')
+		EXEC InsertarSesionQA_sp 1,174498,'02/20/2023','14:00:23','14:17:31',60,'Interprete tiene errores menores al momento de la traducción'
+
+	END
+	IF @opcion = 7
+	BEGIN
+		PRINT('7. Historial de llamadas por intérprete en un periodo dado')
+		EXEC historialPorInterpretePorFechas_sp '05/04/2022','05/20/2022',174498
+	END
+	IF @opcion = 8
+	BEGIN
+		PRINT('8. Horarios planificados por intérprete')
+		EXEC horariosPorInterprete_sp 174498
+	END
+	IF @opcion = 9
+	BEGIN
+		PRINT('9. Calificaciones de los intérpretes')
+		EXEC calificacionPorInterprete_sp 174498
+	END
+
+END
+
+GO

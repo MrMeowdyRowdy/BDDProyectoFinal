@@ -511,8 +511,7 @@ BEGIN
 	IF @opcion = 1
 	BEGIN
 		PRINT('1. Planificación de llamadas')
-		PRINT('Sintaxis: ')
-		EXEC InsertarLlamada_sp 174498,'05/05/2022','10:01:09','10:30:49','St. Agnes Hospital', 'Voice for Help', 'Español', 'Video', 'MED'
+		EXEC InsertarLlamada_sp 174498,'01/05/2022','10:01:09','11:30:49','St. Agnes Hospital', 'Voice for Help', 'Español', 'Video', 'MED'
 	END
 	IF @opcion = 2
 	BEGIN
@@ -537,6 +536,8 @@ BEGIN
 	IF @opcion = 6
 	BEGIN
 		PRINT('6. Nota menor a 70%')
+		EXEC InsertarSesionQA_sp 1,174498,'02/20/2023','14:00:23','14:17:31',60,'Interprete tiene errores menores al momento de la traducción'
+
 	END
 	IF @opcion = 7
 	BEGIN
