@@ -995,3 +995,9 @@ SELECT * FROM Interprete
 -----------------------------------------------------------------
 EXEC InsertarLlamada_sp 174498,'05/05/2022','10:01:09','10:30:49','St. Agnes Hospital', 'Voice for Help', 'Español', 'Video', 'MED'
 SELECT * FROM Llamada
+
+-----------------------------------------------------------------
+--Inserts Operaciones
+-----------------------------------------------------------------
+EXEC InsertarOperaciones_sp 174498,1,'LTL'
+SELECT * FROM Operaciones
