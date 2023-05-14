@@ -67,6 +67,19 @@ GO
 -----------------------------------------------------------------
 USE msdb;
 GO
+
+IF EXISTS (SELECT name FROM dbo.sysmail_profile WHERE name = 'AdminCorreo')
+BEGIN
+	EXECUTE dbo.sysmail_delete_profile_sp
+    @profile_name = 'AdminCorreo';
+END
+
+IF EXISTS (SELECT name FROM dbo.sysmail_account WHERE name = 'OperadorCorreo')
+BEGIN
+	EXECUTE dbo.sysmail_delete_account_sp
+    @account_name = 'OperadorCorreo';
+END
+
 EXECUTE dbo.sysmail_add_account_sp
     @account_name = 'OperadorCorreo',
     @email_address = 'notificacionesBDgrupo6@hotmail.com',
@@ -901,28 +914,54 @@ AS
 GO
 
 -----------------------------------------------------------------
---Creacion Procedimiento para evaluación de interpretación QA
+--Creacion Trigger para Generación de un RCP
 -----------------------------------------------------------------
-DROP TRIGGER IF EXISTS tr_EnviarEmail
-GO
 
-CREATE TRIGGER tr_EnviarEmail
-   ON  Empleado 
+CREATE TRIGGER tr_NotificacionRCP
+   ON  RCP 
    AFTER INSERT
 AS 
 BEGIN
+
     SET NOCOUNT ON;
-
-    DECLARE @body NVARCHAR(MAX);
-    SET @body = 'A new record has been inserted into MyTable.';
-
     EXEC msdb.dbo.sp_send_dbmail
         @profile_name = 'AdminCorreo',
         @recipients = 'notificacionesBDgrupo6@hotmail.com',
-        @subject = 'New record inserted into MyTable',
-        @body = @body,
+        @subject = 'Generación de RCP',
+        @body = 'Un nuevo RCP ha sido creado',
 		@body_format = 'HTML'
+END 
 
+GO
+
+-----------------------------------------------------------------
+--Creacion Trigger para Nota menor a 70%
+-----------------------------------------------------------------
+
+CREATE TRIGGER tr_notaMenor70
+   ON  SesionQA 
+   AFTER INSERT
+AS 
+BEGIN
+	DECLARE @NOTA TINYINT
+	SET @NOTA = (SELECT porcentaje FROM inserted)
+	DECLARE @INTERPRETE INT
+	SET @INTERPRETE = (SELECT interpreteID FROM inserted)
+	DECLARE @CRID INT
+	SET @CRID = (SELECT CRID FROM Interprete)
+	IF(@NOTA<70)
+	DECLARE @body VARCHAR(1000)
+	SET @body = CONCAT('Atención el interprete ',@CRID,' ha obtenido una calificación menor a 70')
+	BEGIN
+		SET NOCOUNT ON;
+		EXEC msdb.dbo.sp_send_dbmail
+			@profile_name = 'AdminCorreo',
+			@recipients = 'notificacionesBDgrupo6@hotmail.com',
+			@subject = 'Baja nota de interprete',
+			@body = @body,
+			@body_format = 'HTML'
+	END
+    
 END 
 
 GO
