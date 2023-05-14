@@ -1006,6 +1006,8 @@ SELECT * FROM Interprete
 --Inserts Llamada - eliminar luego Proveedor pueden ser voice for help, pacific interpreters o LLS
 -----------------------------------------------------------------
 EXEC InsertarLlamada_sp 174498,'05/05/2022','10:01:09','10:30:49','St. Agnes Hospital', 'Voice for Help', 'Español', 'Video', 'MED'
+EXEC InsertarLlamada_sp 170842,'02/04/2023','07:12:56','07:35:10','St. Tomas', 'Voice for Help', 'Español', 'Audio', 'MED'
+EXEC InsertarLlamada_sp 174498,'02/04/2023','12:54:02','13:15:27','Parker Memorial', 'Voice for Help', 'Portgués', 'Audio', 'MED'
 SELECT * FROM Llamada
 
 -----------------------------------------------------------------
