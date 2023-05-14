@@ -1056,6 +1056,7 @@ SELECT * FROM ReporteOPS
 --Inserts SesionQA
 -----------------------------------------------------------------
 EXEC InsertarSesionQA_sp 1,174498,'05/10/2023','14:00:23','14:17:31',95,'Interprete se desenvuelve de buena manera, se recomienda pequeños ajustes en sus postura'
+EXEC InsertarSesionQA_sp 2,170842,'02/04/2023','07:12:56','07:35:10',85,'Debido a fallos en la comunicación, el interpreto cometio algunos errores de lenguaje'
 SELECT * FROM SesionQA
 
 -----------------------------------------------------------------
