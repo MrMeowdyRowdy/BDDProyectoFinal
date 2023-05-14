@@ -2,7 +2,7 @@
 -- Script Base de Datos Interpretia - Proyecto Progreso 1
 -- Autores:
 --	 Chasipanta Pablo
---	 Ocaña Dennis
+--	 OcaÃ±a Dennis
 --	 Ramos Xavier
 -- Version: 1.5
 -- Fecha de creacion: 04/05/2023
@@ -731,7 +731,7 @@ DECLARE  @FECHALLAMADA DATE
 SET @FECHALLAMADA = (SELECT L.fecha FROM Llamada L WHERE L.llamadaID=@IDLLAMADA)
 	IF (DATEDIFF(DAY,@FECHA,@FECHALLAMADA)>1)
 		BEGIN
-			RAISERROR('Error no puede agregar un reporte 24 horas después del incidente',16,10)
+			RAISERROR('Error no puede agregar un reporte 24 horas despuÃ©s del incidente',16,10)
 			ROLLBACK TRANSACTION;
 		END
 	ELSE
@@ -743,7 +743,7 @@ END
 GO
 
 -----------------------------------------------------------------
---Creacion Procedimiento para historial de llamadas por intérprete en un periodo dado
+--Creacion Procedimiento para historial de llamadas por intÃ©rprete en un periodo dado
 -----------------------------------------------------------------
 DROP PROC IF EXISTS historialPorInterpretePorFechas_sp
 GO
@@ -773,7 +773,7 @@ BEGIN
 		RETURN
 	END
 
-	SELECT I.CRID AS 'Código empleado',
+	SELECT I.CRID AS 'CÃ³digo empleado',
 	E.nombre+' '+E.apellido AS 'Nombre del interprete',
 	L.empresaCliente AS 'Empresa', L.tipo AS 'Tipo de llamada',
 	L.horaInicio AS 'Hora inicial', L.horaFin AS 'Hora final', L.fecha AS 'Fecha de la llamada' 
@@ -786,7 +786,7 @@ END
 GO
 
 -----------------------------------------------------------------
---Creacion Procedimiento para horarios planificados por intérprete
+--Creacion Procedimiento para horarios planificados por intÃ©rprete
 -----------------------------------------------------------------
 DROP PROC IF EXISTS horariosPorInterprete_sp
 GO
@@ -809,8 +809,8 @@ BEGIN
 		RETURN
 	END
 
-	SELECT I.CRID AS 'Código empleado', I.horario AS 'Horario asignado',
-	H.horaInicio AS 'Hora de inicio', H.horaFin AS 'Hora de finalización', H.minutosBreak AS 'Minutos de break',
+	SELECT I.CRID AS 'CÃ³digo empleado', I.horario AS 'Horario asignado',
+	H.horaInicio AS 'Hora de inicio', H.horaFin AS 'Hora de finalizaciÃ³n', H.minutosBreak AS 'Minutos de break',
 	E.nombre+' '+E.apellido AS 'Nombre del interprete' FROM Interprete I
 	INNER JOIN Horario H ON I.horario=H.horarioID
 	INNER JOIN Empleado E ON I.CRID=E.CRID
@@ -820,7 +820,7 @@ END
 GO
 
 -----------------------------------------------------------------
---Creacion Procedimiento para calificaciones de los intérpretes
+--Creacion Procedimiento para calificaciones de los intÃ©rpretes
 -----------------------------------------------------------------
 DROP PROC IF EXISTS calificacionPorInterprete_sp
 GO
@@ -843,8 +843,8 @@ BEGIN
 		RETURN
 	END
 
-	SELECT I.CRID AS 'Código empleado',
-	S.porcentaje AS 'Porcentaje de calificación', S.feedback AS 'Feedback',
+	SELECT I.CRID AS 'CÃ³digo empleado',
+	S.porcentaje AS 'Porcentaje de calificaciÃ³n', S.feedback AS 'Feedback',
 	E.nombre+' '+E.apellido AS 'Nombre del interprete' FROM Interprete I
 	INNER JOIN SesionQA S ON I.interpreteID=S.interpreteID
 	INNER JOIN Empleado E ON I.CRID=E.CRID
@@ -865,7 +865,7 @@ AS
 
 	SELECT L.empresaCliente AS 'Empresa', L.tipo AS 'Tipo de llamada',
 	L.horaInicio AS 'Hora inicial', L.horaFin AS 'Hora final', L.fecha AS 'Fecha de la llamada',
-	E.nombre+' '+E.apellido AS 'Nombre del interprete que atendió la llamada'
+	E.nombre+' '+E.apellido AS 'Nombre del interprete que atendiÃ³ la llamada'
 	FROM Llamada L
 	INNER JOIN Interprete I ON L.interpreteID = I.interpreteID
 	INNER JOIN Empleado E ON I.CRID = E.CRID
@@ -882,8 +882,8 @@ CREATE VIEW registroRCP_vw
 
 AS
 
-	SELECT R.mensaje AS 'Mensaje del reporte', R.subcategoria AS 'Subcategoría del reporte',
-	TR.descripcion AS 'Descripción del reporte',
+	SELECT R.mensaje AS 'Mensaje del reporte', R.subcategoria AS 'SubcategorÃ­a del reporte',
+	TR.descripcion AS 'DescripciÃ³n del reporte',
 	L.empresaCliente AS 'Empresa reportada', L.fecha AS 'Fecha de la llamada reportada', L.tipo AS 'Tipo de llamada reportada'
 	FROM RCP R
 	INNER JOIN TipoRCP TR ON R.tipoID = TR.tipoID
@@ -894,7 +894,7 @@ AS
 GO
 
 -----------------------------------------------------------------
---Creacion Procedimiento para evaluación de interpretación QA
+--Creacion Procedimiento para evaluaciÃ³n de interpretaciÃ³n QA
 -----------------------------------------------------------------
 DROP VIEW IF EXISTS evaluacionInterpretacionQA_vw
 GO
@@ -903,8 +903,8 @@ CREATE VIEW evaluacionInterpretacionQA_vw
 
 AS
 
-	SELECT Q.QAID AS 'Id QA que realizo la evaluación', Q.categoria AS 'Categoría del QA',
-	S.fecha AS 'Fecha de la evaluación', S.feedback AS 'Feedback de la evaluación', S.porcentaje AS 'Calificación en porcentaje',
+	SELECT Q.QAID AS 'Id QA que realizo la evaluaciÃ³n', Q.categoria AS 'CategorÃ­a del QA',
+	S.fecha AS 'Fecha de la evaluaciÃ³n', S.feedback AS 'Feedback de la evaluaciÃ³n', S.porcentaje AS 'CalificaciÃ³n en porcentaje',
 	E.nombre+' '+E.apellido AS 'Nombre del interprete evaluado'
 	FROM SesionQA S
 	INNER JOIN QA Q ON S.QAID = Q.QAID
@@ -914,7 +914,7 @@ AS
 GO
 
 -----------------------------------------------------------------
---Creacion Trigger para Generación de un RCP
+--Creacion Trigger para GeneraciÃ³n de un RCP
 -----------------------------------------------------------------
 DROP PROC IF EXISTS tr_NotificacionRCP
 GO
@@ -929,7 +929,7 @@ BEGIN
     EXEC msdb.dbo.sp_send_dbmail
         @profile_name = 'AdminCorreo',
         @recipients = 'notificacionesBDgrupo6@hotmail.com',
-        @subject = 'Generación de RCP',
+        @subject = 'GeneraciÃ³n de RCP',
         @body = 'Un nuevo RCP ha sido creado',
 		@body_format = 'HTML'
 END 
@@ -955,7 +955,7 @@ BEGIN
 	SET @CRID = (SELECT CRID FROM Interprete)
 	IF(@NOTA<70)
 	DECLARE @body VARCHAR(1000)
-	SET @body = CONCAT('Atención el interprete ',@CRID,' ha obtenido una calificación menor a 70')
+	SET @body = CONCAT('AtenciÃ³n el interprete ',@CRID,' ha obtenido una calificaciÃ³n menor a 70')
 	BEGIN
 		SET NOCOUNT ON;
 		EXEC msdb.dbo.sp_send_dbmail
@@ -974,26 +974,36 @@ GO
 -----------------------------------------------------------------
 --Inserts Empleado
 -----------------------------------------------------------------
-EXEC InsertarEmpleado_sp '1721154498','Ecuador','Ocaña','Dennis','0996389675','dennisocana@gmail.com','0'
-EXEC InsertarEmpleado_sp '1721154498','Ecuador','Ocaña','Dennis','0996389675','dennisocana@gmail.com','0'
+EXEC InsertarEmpleado_sp '1721154498','Ecuador','OcaÃ±a','Dennis','0996389675','dennisocana@gmail.com','0'
+EXEC InsertarEmpleado_sp '1724540842','Ecuador','Chasipanta','Pablo','0982427705','Chasi64.z@gmail.com','0'
+EXEC InsertarEmpleado_sp '1721645917','Brasil','Ramos','Xavier','0998716545','Xavier.Ramos@udla.edu.ec','1'
+EXEC InsertarEmpleado_sp '1711896140','Ecuador','Chafla','Alexandra','0992599009','Chafla1980@hotmail.com','1'
+EXEC InsertarEmpleado_sp '1708490097','Ecuador','Maila','DomÃ©nica','0982297973','MailaCasa19@gmail.com','1'
 SELECT * FROM Empleado
 
 -----------------------------------------------------------------
 --Inserts Horario
 -----------------------------------------------------------------
 EXEC InsertarHorario_sp '10:00','14:00','15'
+EXEC InsertarHorario_sp '07:00','15:00','30'
+EXEC InsertarHorario_sp '08:00','12:00','15'
+EXEC InsertarHorario_sp '16:00','23:00','15'
+EXEC InsertarHorario_sp '12:00','16:00','15'
 SELECT * FROM Horario
 
 -----------------------------------------------------------------
 --Inserts Interprete - borrar luego puede ser gold class, rookie o silver class
 -----------------------------------------------------------------
-EXEC InsertarInterprete_sp 174498,1,'VRI','Español - Ingles','Gold Class','12/07/2022'
+EXEC InsertarInterprete_sp 174498,1,'VRI','EspaÃ±ol - Ingles','Gold Class','12/07/2022'
+EXEC InsertarInterprete_sp 175917,4,'VRI','EspaÃ±ol - Ingles - PortuguÃ©s','Gold Class','05/06/2020'
+EXEC InsertarInterprete_sp 170842,2,'VRI','EspaÃ±ol - Ingles','Gold Class','15/12/2020'
+EXEC InsertarInterprete_sp 176140,3,'VRI','EspaÃ±ol - Ingles','Gold Class','03/04/2018'
 SELECT * FROM Interprete
 
 -----------------------------------------------------------------
 --Inserts Llamada - eliminar luego Proveedor pueden ser voice for help, pacific interpreters o LLS
 -----------------------------------------------------------------
-EXEC InsertarLlamada_sp 174498,'05/05/2022','10:01:09','10:30:49','St. Agnes Hospital', 'Voice for Help', 'Español', 'Video', 'MED'
+EXEC InsertarLlamada_sp 174498,'05/05/2022','10:01:09','10:30:49','St. Agnes Hospital', 'Voice for Help', 'EspaÃ±ol', 'Video', 'MED'
 SELECT * FROM Llamada
 
 -----------------------------------------------------------------
