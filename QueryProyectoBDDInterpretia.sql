@@ -73,12 +73,14 @@ BEGIN
 	EXECUTE dbo.sysmail_delete_profile_sp
     @profile_name = 'AdminCorreo';
 END
+GO
 
 IF EXISTS (SELECT name FROM dbo.sysmail_account WHERE name = 'OperadorCorreo')
 BEGIN
 	EXECUTE dbo.sysmail_delete_account_sp
     @account_name = 'OperadorCorreo';
 END
+GO
 
 EXECUTE dbo.sysmail_add_account_sp
     @account_name = 'OperadorCorreo',
@@ -91,21 +93,21 @@ EXECUTE dbo.sysmail_add_account_sp
     @password = 'DPX_1234',
     @use_default_credentials = 0,
 	@enable_ssl = 1 ;
-
+GO
 EXECUTE dbo.sysmail_add_profile_sp
     @profile_name = 'AdminCorreo',
     @description = 'Perfil de administracion para envio de correos';
-
+GO
 EXECUTE dbo.sysmail_add_profileaccount_sp
     @profile_name = 'AdminCorreo',
     @account_name = 'OperadorCorreo',
     @sequence_number = 1;
-
+GO
 EXECUTE dbo.sysmail_add_principalprofile_sp
     @principal_name = 'public',
     @profile_name = 'AdminCorreo',
     @is_default = 1;
-
+GO
 
 -----------------------------------------------------------------
 --Desarrollo para BDD Interpretia
@@ -1009,13 +1011,13 @@ SELECT * FROM Llamada
 -----------------------------------------------------------------
 --Inserts Operaciones - eliminar luego categoria puede ser LTL o TL
 -----------------------------------------------------------------
-EXEC InsertarOperaciones_sp 174498,2,'LTL'
+EXEC InsertarOperaciones_sp 174498,1,'LTL'
 SELECT * FROM Operaciones
 
 -----------------------------------------------------------------
 --Inserts QA - puede ser QA O trainer en categoria
 -----------------------------------------------------------------
-EXEC InsertarQA_sp 174498,3,'QA'
+EXEC InsertarQA_sp 174498,1,'QA'
 SELECT * FROM QA
 
 -----------------------------------------------------------------
@@ -1025,6 +1027,8 @@ EXEC InsertarTipoRCP_sp 'Problemas al inicio de la llamada'
 SELECT * FROM TipoRCP
 
 -----------------------------------------------------------------
---Inserts RCP
+--Inserts RCP - SUBCAT DEBE SER CORRESPONDIENTE SEGUN EL DOC
 -----------------------------------------------------------------
-EXEC InsertarRCP_sp
+EXEC InsertarRCP_sp 174498,1,1,'Llamada de LEP.','LEP presiono el boton llamar del dispositivo sin querer'
+SELECT * FROM RCP
+
