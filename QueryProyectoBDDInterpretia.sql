@@ -11,7 +11,7 @@
 --Verificaciones
 -----------------------------------------------------------------
 
-USE MASTER
+USE master
 DROP DATABASE IF EXISTS Interpretia
 DROP CERTIFICATE Certificate_encryption
 DROP MASTER KEY
@@ -364,6 +364,7 @@ CREATE USER [QA1] FOR LOGIN [QualityAssurance]
 GO
 ALTER ROLE [Lector] ADD MEMBER [QA1]
 GO
+GRANT SELECT (CRID,nombre,apellido) ON Empleado TO QA1
 GRANT INSERT ON OBJECT::[dbo].[SesionQA] TO QA1
 GRANT UPDATE ON OBJECT::[dbo].[SesionQA] TO QA1
 
@@ -371,8 +372,6 @@ GRANT UPDATE ON OBJECT::[dbo].[SesionQA] TO QA1
 --Creacion de Users - LTL
 -----------------------------------------------------------------
 CREATE USER [LeadTeamLeader] FOR LOGIN [LeadTeamLeader]
-GO
-USE [Interpretia]
 GO
 ALTER ROLE [Lector] ADD MEMBER [LeadTeamLeader]
 GO
@@ -406,13 +405,10 @@ GRANT UPDATE ON OBJECT::[dbo].[TipoRCP] TO [LeadTeamLeader]
 -----------------------------------------------------------------
 CREATE USER [Interprete] FOR LOGIN [Interprete]
 GO
-USE [Interpretia]
-GO
 ALTER ROLE [Lector] ADD MEMBER [Interprete]
 GO
---Permisos en la tabla Llamada
+--Permisos en la tabla Llamada y RCP
+GRANT SELECT ON OBJECT::[dbo].[Llamada] TO [Interprete]
+GRANT INSERT ON OBJECT::[dbo].[RCP] TO [Interprete]
 GRANT INSERT ON OBJECT::[dbo].[Llamada] TO [Interprete]
 GRANT UPDATE ON OBJECT::[dbo].[Llamada] TO [Interprete]
-
-
---GRANT SELECT (COLUMNAS A PONER) [ACCION] ON NOMBRE TABLA TO USUARIO GO
