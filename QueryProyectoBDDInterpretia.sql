@@ -1032,3 +1032,8 @@ SELECT * FROM TipoRCP
 EXEC InsertarRCP_sp 174498,1,1,'Llamada de LEP.','LEP presiono el boton llamar del dispositivo sin querer'
 SELECT * FROM RCP
 
+-----------------------------------------------------------------
+--Inserts ReporteOPS
+-----------------------------------------------------------------
+EXEC InsertarReporteOPS_sp 174498,1,'05/13/2023 10:30',''
+SELECT * FROM ReporteOPS
