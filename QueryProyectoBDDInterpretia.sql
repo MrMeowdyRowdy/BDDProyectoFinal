@@ -954,7 +954,7 @@ BEGIN
 	DECLARE @INTERPRETE INT
 	SET @INTERPRETE = (SELECT interpreteID FROM inserted)
 	DECLARE @CRID INT
-	SET @CRID = (SELECT CRID FROM Interprete)
+	SET @CRID = (SELECT CRID FROM Interprete I WHERE I.interpreteID=@INTERPRETE)
 	DECLARE @body VARCHAR(1000)
 	SET @body = CONCAT('Atención el interprete ',@CRID,' ha obtenido una calificación menor a 70')
 	IF(@NOTA<70)
