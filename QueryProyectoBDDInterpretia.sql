@@ -997,7 +997,13 @@ EXEC InsertarLlamada_sp 174498,'05/05/2022','10:01:09','10:30:49','St. Agnes Hos
 SELECT * FROM Llamada
 
 -----------------------------------------------------------------
---Inserts Operaciones
+--Inserts Operaciones - eliminar luego categoria puede ser LTL o TL
 -----------------------------------------------------------------
-EXEC InsertarOperaciones_sp 174498,1,'LTL'
+EXEC InsertarOperaciones_sp 174498,2,'LTL'
 SELECT * FROM Operaciones
+
+-----------------------------------------------------------------
+--Inserts QA - puede ser QA O trainer en categoria
+-----------------------------------------------------------------
+EXEC InsertarQA_sp 174498,3,'QA'
+SELECT * FROM QA
