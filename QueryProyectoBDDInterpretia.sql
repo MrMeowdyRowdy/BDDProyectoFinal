@@ -1039,3 +1039,9 @@ SELECT * FROM RCP
 -----------------------------------------------------------------
 EXEC InsertarReporteOPS_sp 174498,1,'05/13/2023 10:30',''
 SELECT * FROM ReporteOPS
+
+-----------------------------------------------------------------
+--Inserts SesionQA
+-----------------------------------------------------------------
+EXEC InsertarSesionQA_sp 1,174498,'05/10/2023','14:00:23','14:17:31',95,'Interprete se desenvuelve de buena manera, se recomienda pequeños ajustes en sus postura'
+SELECT * FROM SesionQA
