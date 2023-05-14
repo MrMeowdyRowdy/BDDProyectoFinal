@@ -21,7 +21,7 @@ BEGIN
 DECLARE @CRID INT
 SET @CRID = CONCAT(LEFT(@nroIdentificacion, 2),RIGHT(@nroIdentificacion, 4))
 DECLARE @emailRackspace MAIL
-SET @emailRackspace = CONCAT(@crid,'megonetworks.pe')
+SET @emailRackspace = CONCAT(@crid,'@megonetworks.pe')
 
 INSERT INTO Empleado(CRID, nroIdentificacion, sede, apellido, nombre, tlfContacto, emailPersonal,emailRackspace,fullTime) 
 VALUES (@crid, @nroIdentificacion, @sede, @apellido, @nombre, @tlfContacto, @emailPersonal,@emailRackspace,@fullTime)
@@ -410,4 +410,32 @@ AS
 	INNER JOIN Empleado E ON I.CRID = E.CRID
 
 GO
+
+-----------------------------------------------------------------
+--Creacion Procedimiento para evaluación de interpretación QA
+-----------------------------------------------------------------
+
+CREATE TRIGGER tr_EnviarEmail
+   ON  Empleado 
+   AFTER INSERT
+AS 
+BEGIN
+    SET NOCOUNT ON;
+
+    DECLARE @body NVARCHAR(MAX);
+    SET @body = 'A new record has been inserted into MyTable.';
+
+    EXEC msdb.dbo.sp_send_dbmail
+        @profile_name = 'AdminCorreo',
+        @recipients = 'notificacionesBDgrupo6@hotmail.com',
+        @subject = 'New record inserted into MyTable',
+        @body = @body,
+		@body_format = 'HTML'
+
+END 
+
+GO
+
+--EXEC InsertarEmpleado_sp '1721645917','quito','ramos','xavier','0998716545','xavi@gmail.com',1
+--DELETE FROM Empleado
 
