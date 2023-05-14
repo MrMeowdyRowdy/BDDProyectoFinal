@@ -512,22 +512,27 @@ BEGIN
 	BEGIN
 		PRINT('1. Planificación de llamadas')
 		PRINT('Sintaxis: ')
+		EXEC InsertarLlamada_sp 174498,'05/05/2022','10:01:09','10:30:49','St. Agnes Hospital', 'Voice for Help', 'Español', 'Video', 'MED'
 	END
 	IF @opcion = 2
 	BEGIN
 		PRINT('2. Registro de llamadas atendidas')	
+		SELECT * FROM registroLlamadasAtendidas_vw
 	END
 	IF @opcion = 3
 	BEGIN
 		PRINT('3. Registro de RPC ')
+		SELECT * FROM registroRCP_vw
 	END
 	IF @opcion = 4
 	BEGIN
 		PRINT('4. Evaluación de interpretación QA')
+		SELECT * FROM evaluacionInterpretacionQA_vw	
 	END
 	IF @opcion = 5
 	BEGIN
 		PRINT('5. Generación de un RCP')
+		EXEC InsertarRCP_sp 174498,1,1,'Llamada de LEP.','LEP presiono el boton llamar del dispositivo intensionadamente'
 	END
 	IF @opcion = 6
 	BEGIN
@@ -548,8 +553,6 @@ BEGIN
 		PRINT('9. Calificaciones de los intérpretes')
 		EXEC calificacionPorInterprete_sp 174498
 	END
-
-END
 
 END
 

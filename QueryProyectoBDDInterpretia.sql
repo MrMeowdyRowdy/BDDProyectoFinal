@@ -955,9 +955,9 @@ BEGIN
 	SET @INTERPRETE = (SELECT interpreteID FROM inserted)
 	DECLARE @CRID INT
 	SET @CRID = (SELECT CRID FROM Interprete)
-	IF(@NOTA<70)
 	DECLARE @body VARCHAR(1000)
 	SET @body = CONCAT('Atención el interprete ',@CRID,' ha obtenido una calificación menor a 70')
+	IF(@NOTA<70)
 	BEGIN
 		SET NOCOUNT ON;
 		EXEC msdb.dbo.sp_send_dbmail
