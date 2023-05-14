@@ -977,3 +977,13 @@ GO
 EXEC InsertarEmpleado_sp '1721154498','Ecuador','Ocaña','Dennis','0996389675','dennisocana@gmail.com','0'
 EXEC InsertarEmpleado_sp '1721154498','Ecuador','Ocaña','Dennis','0996389675','dennisocana@gmail.com','0'
 SELECT * FROM Empleado
+
+-----------------------------------------------------------------
+--Inserts Horario
+-----------------------------------------------------------------
+EXEC InsertarHorario_sp '10:00','14:00','15'
+SELECT * FROM Horario
+
+-----------------------------------------------------------------
+--Inserts Horario
+-----------------------------------------------------------------
