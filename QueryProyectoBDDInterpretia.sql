@@ -974,4 +974,5 @@ GO
 -----------------------------------------------------------------
 --Inserts Empleado
 -----------------------------------------------------------------
-
+INSERT INTO Empleado (CRID, nroIdentificacion,sede,apellido,nombre,tlfContacto,emailPersonal,emailRackspace,fullTime)
+VALUES()
