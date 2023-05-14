@@ -255,6 +255,8 @@ GO
 -----------------------------------------------------------------
 --Creacion Procedimiento para historial de llamadas por intérprete en un periodo dado
 -----------------------------------------------------------------
+DROP PROC IF EXISTS historialPorInterpretePorFechas_sp
+GO
 
 CREATE PROC historialPorInterpretePorFechas_sp
 
@@ -288,7 +290,7 @@ BEGIN
 	FROM Llamada L
 	INNER JOIN Interprete I ON L.interpreteID=L.interpreteID
 	INNER JOIN Empleado E ON I.CRID=E.CRID
-	WHERE I.interpreteID=@interpreteID and  @fechaInicia < L.fecha and L.fecha < @fechaFinal
+	WHERE I.interpreteID=@interpreteID and  L.fecha between @fechaInicia AND @fechaFinal
 END
 
 GO
@@ -534,7 +536,7 @@ BEGIN
 	IF @opcion = 7
 	BEGIN
 		PRINT('7. Historial de llamadas por intérprete en un periodo dado')
-		EXEC historialPorInterpretePorFechas_sp '01/05/2022','30/05/2022',174498
+		EXEC historialPorInterpretePorFechas_sp '05/04/2022','05/20/2022',174498
 	END
 	IF @opcion = 8
 	BEGIN
