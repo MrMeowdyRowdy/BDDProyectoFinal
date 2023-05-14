@@ -19,6 +19,7 @@ CREATE USER [QA1] FOR LOGIN [QualityAssurance]
 GO
 ALTER ROLE [Lector] ADD MEMBER [QA1]
 GO
+GRANT SELECT (CRID,nombre,apellido) ON Empleado TO QA1
 GRANT INSERT ON OBJECT::[dbo].[SesionQA] TO QA1
 GRANT UPDATE ON OBJECT::[dbo].[SesionQA] TO QA1
 
@@ -65,6 +66,8 @@ USE [Interpretia]
 GO
 ALTER ROLE [Lector] ADD MEMBER [Interprete]
 GO
---Permisos en la tabla Llamada
+--Permisos en la tabla Llamada y RCP
+GRANT SELECT ON OBJECT::[dbo].[Llamada] TO [Interprete]
+GRANT INSERT ON OBJECT::[dbo].[RCP] TO [Interprete]
 GRANT INSERT ON OBJECT::[dbo].[Llamada] TO [Interprete]
 GRANT UPDATE ON OBJECT::[dbo].[Llamada] TO [Interprete]
