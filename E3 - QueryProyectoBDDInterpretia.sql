@@ -4,11 +4,12 @@
 --	 Chasipanta Pablo
 --	 Ocaña Dennis
 --	 Ramos Xavier
--- Version: 1.5
+-- Version: 2.0
 -- Fecha de creacion: 04/05/2023
--- Fecha de actualizacion: 13/05/2023
+-- Fecha de actualizacion: 17/07/2023
 -----------------------------------------------------------------
---Verificaciones
+-- Verificaciones y eliminación de contenido
+-- en caso de su existencia 
 -----------------------------------------------------------------
 
 USE master
