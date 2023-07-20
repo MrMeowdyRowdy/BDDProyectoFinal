@@ -58,12 +58,14 @@ GO
 DROP USER IF EXISTS [QA1]
 DROP USER IF EXISTS [LeadTeamLeader]
 DROP USER IF EXISTS [Interprete]
+USE msdb
+DROP USER IF EXISTS [QA1]
+DROP USER IF EXISTS [LeadTeamLeader]
+DROP USER IF EXISTS [Interprete]
 GO
+USE Interpretia
 DROP ROLE IF EXISTS [Lector]
 GO
-
-
-
 
 -----------------------------------------------------------------
 --Creacion de perfil para envio de correos
@@ -431,12 +433,7 @@ CREATE USER [QA1] FOR LOGIN [QualityAssurance] WITH DEFAULT_SCHEMA=[DatabaseMail
 GO
 ALTER ROLE [DatabaseMailUserRole] ADD MEMBER [QA1]
 GO
---Permisos de uso de Objetos Programables
-GRANT EXECUTE ON OBJECT::[dbo].[calificacionPorInterprete_sp] TO QA1
-GRANT EXECUTE ON OBJECT::[dbo].[InsertarSesionQA_sp] TO QA1
-GRANT EXECUTE ON OBJECT::[dbo].[MenuEjecutable_sp] TO QA1
-GRANT EXECUTE ON OBJECT::[dbo].[MostrarMenu_sp] TO QA1
-GRANT SELECT ON OBJECT::[dbo].[evaluacionInterpretacionQA_vw] TO QA1
+
 
 -----------------------------------------------------------------
 --Creacion de Users - LTL
@@ -479,32 +476,13 @@ GRANT UPDATE ON OBJECT::[dbo].[ReporteOPS] TO [LeadTeamLeader]
 GRANT SELECT ON OBJECT::[dbo].[TipoRCP] TO [LeadTeamLeader]
 GRANT INSERT ON OBJECT::[dbo].[TipoRCP] TO [LeadTeamLeader]
 GRANT UPDATE ON OBJECT::[dbo].[TipoRCP] TO [LeadTeamLeader]
---Permisos de uso de Objetos Programables
-GRANT EXECUTE ON OBJECT::[dbo].[calificacionPorInterprete_sp] TO [LeadTeamLeader]
-GRANT EXECUTE ON OBJECT::[dbo].[InsertarSesionQA_sp] TO [LeadTeamLeader]
-GRANT EXECUTE ON OBJECT::[dbo].[MenuEjecutable_sp] TO [LeadTeamLeader]
-GRANT EXECUTE ON OBJECT::[dbo].[MostrarMenu_sp] TO [LeadTeamLeader]
-GRANT EXECUTE ON OBJECT::[dbo].[historialPorInterpretePorFechas_sp] TO [LeadTeamLeader]
-GRANT EXECUTE ON OBJECT::[dbo].[horariosPorInterprete_sp] TO [LeadTeamLeader]
-GRANT EXECUTE ON OBJECT::[dbo].[InsertarEmpleado_sp] TO [LeadTeamLeader]
-GRANT EXECUTE ON OBJECT::[dbo].[InsertarHorario_sp] TO [LeadTeamLeader]
-GRANT EXECUTE ON OBJECT::[dbo].[InsertarInterprete_sp] TO [LeadTeamLeader]
-GRANT EXECUTE ON OBJECT::[dbo].[InsertarOperaciones_sp] TO [LeadTeamLeader]
-GRANT EXECUTE ON OBJECT::[dbo].[InsertarQA_sp] TO [LeadTeamLeader]
-GRANT EXECUTE ON OBJECT::[dbo].[InsertarRCP_sp] TO [LeadTeamLeader]
-GRANT EXECUTE ON OBJECT::[dbo].[InsertarReporteOPS_sp] TO [LeadTeamLeader]
-GRANT EXECUTE ON OBJECT::[dbo].[InsertarTipoRCP_sp] TO [LeadTeamLeader]
---Permisos para ejecutar views
-GRANT SELECT ON OBJECT::[dbo].[evaluacionInterpretacionQA_vw] TO [LeadTeamLeader]
-GRANT SELECT ON OBJECT::[dbo].[registroLlamadasAtendidas_vw] TO [LeadTeamLeader]
-GRANT SELECT ON OBJECT::[dbo].[registroRCP_vw] TO [LeadTeamLeader]
 
 
 USE [msdb]
 GO
-CREATE USER [Lead] FOR LOGIN [LeadTeamLeader] WITH DEFAULT_SCHEMA=[DatabaseMailUserRole]
+CREATE USER [LeadTeamLeader] FOR LOGIN [LeadTeamLeader] WITH DEFAULT_SCHEMA=[DatabaseMailUserRole]
 GO
-ALTER ROLE [DatabaseMailUserRole] ADD MEMBER [Lead]
+ALTER ROLE [DatabaseMailUserRole] ADD MEMBER [LeadTeamLeader]
 GO
 
 -----------------------------------------------------------------
@@ -522,14 +500,11 @@ GRANT INSERT ON OBJECT::[dbo].[RCP] TO [Interprete]
 GRANT SELECT ON OBJECT::[dbo].[Llamada] TO [Interprete]
 GRANT INSERT ON OBJECT::[dbo].[Llamada] TO [Interprete]
 GRANT UPDATE ON OBJECT::[dbo].[Llamada] TO [Interprete]
---Permisos de uso de Objetos Programables
-GRANT EXECUTE ON OBJECT::[dbo].[MenuEjecutable_sp] TO [Interprete]
-GRANT EXECUTE ON OBJECT::[dbo].[MostrarMenu_sp] TO [Interprete]
-GRANT EXECUTE ON OBJECT::[dbo].[InsertarLlamada_sp] TO [Interprete]
-GRANT EXECUTE ON OBJECT::[dbo].[InsertarRCP_sp] TO [Interprete]
+
 
 USE [msdb]
 GO
+
 CREATE USER [Interprete] FOR LOGIN [Interprete] WITH DEFAULT_SCHEMA=[DatabaseMailUserRole]
 GO
 ALTER ROLE [DatabaseMailUserRole] ADD MEMBER [Interprete]
@@ -1239,4 +1214,37 @@ EXEC MostrarMenu_sp
 
 GO
 
-EXEC MenuEjecutable_sp 6
+USE Interpretia
+
+--Permisos de uso de Objetos Programables
+GRANT EXECUTE ON OBJECT::[dbo].[calificacionPorInterprete_sp] TO QA1
+GRANT EXECUTE ON OBJECT::[dbo].[InsertarSesionQA_sp] TO QA1
+GRANT EXECUTE ON OBJECT::[dbo].[MenuEjecutable_sp] TO QA1
+GRANT EXECUTE ON OBJECT::[dbo].[MostrarMenu_sp] TO QA1
+GRANT SELECT ON OBJECT::[dbo].[evaluacionInterpretacionQA_vw] TO QA1
+
+--Permisos de uso de Objetos Programables
+GRANT EXECUTE ON OBJECT::[dbo].[calificacionPorInterprete_sp] TO [LeadTeamLeader]
+GRANT EXECUTE ON OBJECT::[dbo].[InsertarSesionQA_sp] TO [LeadTeamLeader]
+GRANT EXECUTE ON OBJECT::[dbo].[MenuEjecutable_sp] TO [LeadTeamLeader]
+GRANT EXECUTE ON OBJECT::[dbo].[MostrarMenu_sp] TO [LeadTeamLeader]
+GRANT EXECUTE ON OBJECT::[dbo].[historialPorInterpretePorFechas_sp] TO [LeadTeamLeader]
+GRANT EXECUTE ON OBJECT::[dbo].[horariosPorInterprete_sp] TO [LeadTeamLeader]
+GRANT EXECUTE ON OBJECT::[dbo].[InsertarEmpleado_sp] TO [LeadTeamLeader]
+GRANT EXECUTE ON OBJECT::[dbo].[InsertarHorario_sp] TO [LeadTeamLeader]
+GRANT EXECUTE ON OBJECT::[dbo].[InsertarInterprete_sp] TO [LeadTeamLeader]
+GRANT EXECUTE ON OBJECT::[dbo].[InsertarOperaciones_sp] TO [LeadTeamLeader]
+GRANT EXECUTE ON OBJECT::[dbo].[InsertarQA_sp] TO [LeadTeamLeader]
+GRANT EXECUTE ON OBJECT::[dbo].[InsertarRCP_sp] TO [LeadTeamLeader]
+GRANT EXECUTE ON OBJECT::[dbo].[InsertarReporteOPS_sp] TO [LeadTeamLeader]
+GRANT EXECUTE ON OBJECT::[dbo].[InsertarTipoRCP_sp] TO [LeadTeamLeader]
+--Permisos para ejecutar views
+GRANT SELECT ON OBJECT::[dbo].[evaluacionInterpretacionQA_vw] TO [LeadTeamLeader]
+GRANT SELECT ON OBJECT::[dbo].[registroLlamadasAtendidas_vw] TO [LeadTeamLeader]
+GRANT SELECT ON OBJECT::[dbo].[registroRCP_vw] TO [LeadTeamLeader]
+
+--Permisos de uso de Objetos Programables
+GRANT EXECUTE ON OBJECT::[dbo].[MenuEjecutable_sp] TO [Interprete]
+GRANT EXECUTE ON OBJECT::[dbo].[MostrarMenu_sp] TO [Interprete]
+GRANT EXECUTE ON OBJECT::[dbo].[InsertarLlamada_sp] TO [Interprete]
+GRANT EXECUTE ON OBJECT::[dbo].[InsertarRCP_sp] TO [Interprete]
