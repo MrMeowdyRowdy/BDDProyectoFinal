@@ -1222,6 +1222,7 @@ GRANT EXECUTE ON OBJECT::[dbo].[InsertarSesionQA_sp] TO QA1
 GRANT EXECUTE ON OBJECT::[dbo].[MenuEjecutable_sp] TO QA1
 GRANT EXECUTE ON OBJECT::[dbo].[MostrarMenu_sp] TO QA1
 GRANT SELECT ON OBJECT::[dbo].[evaluacionInterpretacionQA_vw] TO QA1
+GRANT EXECUTE ON OBJECT::[dbo].[ObtenerPromedioCalificacionesPorFecha_sp] TO QA1
 
 --Permisos de uso de Objetos Programables
 GRANT EXECUTE ON OBJECT::[dbo].[calificacionPorInterprete_sp] TO [LeadTeamLeader]
@@ -1238,6 +1239,7 @@ GRANT EXECUTE ON OBJECT::[dbo].[InsertarQA_sp] TO [LeadTeamLeader]
 GRANT EXECUTE ON OBJECT::[dbo].[InsertarRCP_sp] TO [LeadTeamLeader]
 GRANT EXECUTE ON OBJECT::[dbo].[InsertarReporteOPS_sp] TO [LeadTeamLeader]
 GRANT EXECUTE ON OBJECT::[dbo].[InsertarTipoRCP_sp] TO [LeadTeamLeader]
+GRANT EXECUTE ON OBJECT::[dbo].[ObtenerPromedioCalificacionesPorFecha_sp] TO [LeadTeamLeader]
 --Permisos para ejecutar views
 GRANT SELECT ON OBJECT::[dbo].[evaluacionInterpretacionQA_vw] TO [LeadTeamLeader]
 GRANT SELECT ON OBJECT::[dbo].[registroLlamadasAtendidas_vw] TO [LeadTeamLeader]
