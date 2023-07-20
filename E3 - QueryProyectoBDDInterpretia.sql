@@ -11,7 +11,6 @@
 -- Verificaciones y eliminación de contenido
 -- en caso de su existencia 
 -----------------------------------------------------------------
-
 USE master
 DROP DATABASE IF EXISTS Interpretia
 DROP CERTIFICATE Certificate_encryption
@@ -62,6 +61,9 @@ DROP USER IF EXISTS [Interprete]
 GO
 DROP ROLE IF EXISTS [Lector]
 GO
+
+
+
 
 -----------------------------------------------------------------
 --Creacion de perfil para envio de correos
@@ -114,6 +116,8 @@ GO
 --Desarrollo para BDD Interpretia
 -----------------------------------------------------------------
 Use Interpretia
+GO -- Habilitar envío de correo electrónico
+IF EXISTS ( SELECT 1 FROM sys.configurations WHERE NAME = 'Database Mail XPs' AND VALUE = 0) BEGIN PRINT 'Enabling Database Mail XPs' EXEC sp_configure 'show advanced options', 1; RECONFIGURE EXEC sp_configure 'Database Mail XPs', 1; RECONFIGURE END
 GO
 -----------------------------------------------------------------
 --Creacion de regla para estructura dato mail
@@ -405,6 +409,8 @@ GO
 CREATE LOGIN [Interprete] WITH PASSWORD=N'Interpretia123.' MUST_CHANGE, DEFAULT_DATABASE=[Interpretia], DEFAULT_LANGUAGE=[us_english], CHECK_EXPIRATION=ON, CHECK_POLICY=ON
 GO
 
+
+
 -----------------------------------------------------------------
 --Creacion de Users - QA
 -----------------------------------------------------------------
@@ -419,9 +425,24 @@ GRANT SELECT ON OBJECT::[dbo].[SesionQA] TO QA1
 GRANT INSERT ON OBJECT::[dbo].[SesionQA] TO QA1
 GRANT UPDATE ON OBJECT::[dbo].[SesionQA] TO QA1
 
+USE [msdb]
+GO
+CREATE USER [QA1] FOR LOGIN [QualityAssurance] WITH DEFAULT_SCHEMA=[DatabaseMailUserRole]
+GO
+ALTER ROLE [DatabaseMailUserRole] ADD MEMBER [QA1]
+GO
+--Permisos de uso de Objetos Programables
+GRANT EXECUTE ON OBJECT::[dbo].[calificacionPorInterprete_sp] TO QA1
+GRANT EXECUTE ON OBJECT::[dbo].[InsertarSesionQA_sp] TO QA1
+GRANT EXECUTE ON OBJECT::[dbo].[MenuEjecutable_sp] TO QA1
+GRANT EXECUTE ON OBJECT::[dbo].[MostrarMenu_sp] TO QA1
+GRANT SELECT ON OBJECT::[dbo].[evaluacionInterpretacionQA_vw] TO QA1
+
 -----------------------------------------------------------------
 --Creacion de Users - LTL
 -----------------------------------------------------------------
+USE [Interpretia]
+GO
 CREATE USER [LeadTeamLeader] FOR LOGIN [LeadTeamLeader]
 GO
 ALTER ROLE [Lector] ADD MEMBER [LeadTeamLeader]
@@ -458,10 +479,39 @@ GRANT UPDATE ON OBJECT::[dbo].[ReporteOPS] TO [LeadTeamLeader]
 GRANT SELECT ON OBJECT::[dbo].[TipoRCP] TO [LeadTeamLeader]
 GRANT INSERT ON OBJECT::[dbo].[TipoRCP] TO [LeadTeamLeader]
 GRANT UPDATE ON OBJECT::[dbo].[TipoRCP] TO [LeadTeamLeader]
+--Permisos de uso de Objetos Programables
+GRANT EXECUTE ON OBJECT::[dbo].[calificacionPorInterprete_sp] TO [LeadTeamLeader]
+GRANT EXECUTE ON OBJECT::[dbo].[InsertarSesionQA_sp] TO [LeadTeamLeader]
+GRANT EXECUTE ON OBJECT::[dbo].[MenuEjecutable_sp] TO [LeadTeamLeader]
+GRANT EXECUTE ON OBJECT::[dbo].[MostrarMenu_sp] TO [LeadTeamLeader]
+GRANT EXECUTE ON OBJECT::[dbo].[historialPorInterpretePorFechas_sp] TO [LeadTeamLeader]
+GRANT EXECUTE ON OBJECT::[dbo].[horariosPorInterprete_sp] TO [LeadTeamLeader]
+GRANT EXECUTE ON OBJECT::[dbo].[InsertarEmpleado_sp] TO [LeadTeamLeader]
+GRANT EXECUTE ON OBJECT::[dbo].[InsertarHorario_sp] TO [LeadTeamLeader]
+GRANT EXECUTE ON OBJECT::[dbo].[InsertarInterprete_sp] TO [LeadTeamLeader]
+GRANT EXECUTE ON OBJECT::[dbo].[InsertarOperaciones_sp] TO [LeadTeamLeader]
+GRANT EXECUTE ON OBJECT::[dbo].[InsertarQA_sp] TO [LeadTeamLeader]
+GRANT EXECUTE ON OBJECT::[dbo].[InsertarRCP_sp] TO [LeadTeamLeader]
+GRANT EXECUTE ON OBJECT::[dbo].[InsertarReporteOPS_sp] TO [LeadTeamLeader]
+GRANT EXECUTE ON OBJECT::[dbo].[InsertarTipoRCP_sp] TO [LeadTeamLeader]
+--Permisos para ejecutar views
+GRANT SELECT ON OBJECT::[dbo].[evaluacionInterpretacionQA_vw] TO [LeadTeamLeader]
+GRANT SELECT ON OBJECT::[dbo].[registroLlamadasAtendidas_vw] TO [LeadTeamLeader]
+GRANT SELECT ON OBJECT::[dbo].[registroRCP_vw] TO [LeadTeamLeader]
+
+
+USE [msdb]
+GO
+CREATE USER [Lead] FOR LOGIN [LeadTeamLeader] WITH DEFAULT_SCHEMA=[DatabaseMailUserRole]
+GO
+ALTER ROLE [DatabaseMailUserRole] ADD MEMBER [Lead]
+GO
 
 -----------------------------------------------------------------
 --Creacion de Users - Interprete
 -----------------------------------------------------------------
+USE [Interpretia]
+GO
 CREATE USER [Interprete] FOR LOGIN [Interprete]
 GO
 ALTER ROLE [Lector] ADD MEMBER [Interprete]
@@ -472,14 +522,31 @@ GRANT INSERT ON OBJECT::[dbo].[RCP] TO [Interprete]
 GRANT SELECT ON OBJECT::[dbo].[Llamada] TO [Interprete]
 GRANT INSERT ON OBJECT::[dbo].[Llamada] TO [Interprete]
 GRANT UPDATE ON OBJECT::[dbo].[Llamada] TO [Interprete]
+--Permisos de uso de Objetos Programables
+GRANT EXECUTE ON OBJECT::[dbo].[MenuEjecutable_sp] TO [Interprete]
+GRANT EXECUTE ON OBJECT::[dbo].[MostrarMenu_sp] TO [Interprete]
+GRANT EXECUTE ON OBJECT::[dbo].[InsertarLlamada_sp] TO [Interprete]
+GRANT EXECUTE ON OBJECT::[dbo].[InsertarRCP_sp] TO [Interprete]
 
+USE [msdb]
+GO
+CREATE USER [Interprete] FOR LOGIN [Interprete] WITH DEFAULT_SCHEMA=[DatabaseMailUserRole]
+GO
+ALTER ROLE [DatabaseMailUserRole] ADD MEMBER [Interprete]
+GO
 
-USE Interpretia
+GRANT EXECUTE ON OBJECT::msdb.dbo.sp_send_dbmail TO QA1
+GO
+GRANT EXECUTE ON OBJECT::msdb.dbo.sp_send_dbmail TO Interprete
+GO
+GRANT EXECUTE ON OBJECT::msdb.dbo.sp_send_dbmail TO LeadTeamLeader
 GO
 
 ---------------------------------------------------------------------------------------------------------------------------------
 --Creacion objetos programables
 ---------------------------------------------------------------------------------------------------------------------------------
+USE Interpretia
+GO
 -----------------------------------------------------------------
 --Creacion Procedimiento para ingreso de usuarios
 -----------------------------------------------------------------
