@@ -331,8 +331,7 @@ especializacion CHAR(3) NOT NULL
 CONSTRAINT PK_Llamada PRIMARY KEY (llamadaID),
 CONSTRAINT FK_LlamadaInterprete FOREIGN KEY (interpreteID) REFERENCES Interprete(interpreteID),
 CONSTRAINT CK_LlamadaFecha CHECK (fecha <= GETDATE()),
-CONSTRAINT CK_LlamadahoraInicio CHECK (horaInicio <= CONVERT(TIME(0),GETDATE())),
-CONSTRAINT CK_LlamadahoraFin CHECK (horaFin <= CONVERT(TIME(0),GETDATE())),
+CONSTRAINT CK_LlamadahoraInicio CHECK (horaInicio <= horaFin),
 CONSTRAINT CK_LlamadahoraDIFF CHECK (horaInicio < horaFin),
 CONSTRAINT CK_LlamadaEspecializacion CHECK (especializacion like 'CSV' OR especializacion LIKE 'MED' OR especializacion LIKE 'LAW')
 )
@@ -399,9 +398,9 @@ GO
 -----------------------------------------------------------------
 USE [master]
 GO
-CREATE LOGIN [QualityAssurance] WITH PASSWORD=N'QA123.', DEFAULT_DATABASE=[Interpretia], DEFAULT_LANGUAGE=[us_english], CHECK_EXPIRATION=ON, CHECK_POLICY=ON
+CREATE LOGIN [QualityAssurance] WITH PASSWORD=N'Interpretia123.', DEFAULT_DATABASE=[Interpretia], DEFAULT_LANGUAGE=[us_english], CHECK_EXPIRATION=ON, CHECK_POLICY=ON
 GO
-CREATE LOGIN [LeadTeamLeader] WITH PASSWORD=N'LeadTL123.' MUST_CHANGE, DEFAULT_DATABASE=[Interpretia], DEFAULT_LANGUAGE=[us_english], CHECK_EXPIRATION=ON, CHECK_POLICY=ON
+CREATE LOGIN [LeadTeamLeader] WITH PASSWORD=N'Interpretia123.' MUST_CHANGE, DEFAULT_DATABASE=[Interpretia], DEFAULT_LANGUAGE=[us_english], CHECK_EXPIRATION=ON, CHECK_POLICY=ON
 GO
 CREATE LOGIN [Interprete] WITH PASSWORD=N'Interpretia123.' MUST_CHANGE, DEFAULT_DATABASE=[Interpretia], DEFAULT_LANGUAGE=[us_english], CHECK_EXPIRATION=ON, CHECK_POLICY=ON
 GO
@@ -415,7 +414,8 @@ CREATE USER [QA1] FOR LOGIN [QualityAssurance]
 GO
 ALTER ROLE [Lector] ADD MEMBER [QA1]
 GO
-GRANT SELECT (CRID,nombre,apellido) ON Empleado TO QA1
+GRANT SELECT ON Empleado TO QA1
+GRANT SELECT ON OBJECT::[dbo].[SesionQA] TO QA1
 GRANT INSERT ON OBJECT::[dbo].[SesionQA] TO QA1
 GRANT UPDATE ON OBJECT::[dbo].[SesionQA] TO QA1
 
@@ -427,27 +427,35 @@ GO
 ALTER ROLE [Lector] ADD MEMBER [LeadTeamLeader]
 GO
 --Permisos en tabla empleado
+GRANT SELECT ON OBJECT::[dbo].[Empleado] TO [LeadTeamLeader]
 GRANT INSERT ON OBJECT::[dbo].[Empleado] TO [LeadTeamLeader]
 GRANT UPDATE ON OBJECT::[dbo].[Empleado] TO [LeadTeamLeader]
 --Permisos en la tabla horario
+GRANT SELECT ON OBJECT::[dbo].[Horario] TO [LeadTeamLeader]
 GRANT INSERT ON OBJECT::[dbo].[Horario] TO [LeadTeamLeader]
 GRANT UPDATE ON OBJECT::[dbo].[Horario] TO [LeadTeamLeader]
 --Permisos en la tabla Interprete
+GRANT SELECT ON OBJECT::[dbo].[Interprete] TO [LeadTeamLeader]
 GRANT INSERT ON OBJECT::[dbo].[Interprete] TO [LeadTeamLeader]
 GRANT UPDATE ON OBJECT::[dbo].[Interprete] TO [LeadTeamLeader]
 --Permisos en la tabla Llamada
+GRANT SELECT ON OBJECT::[dbo].[Llamada] TO [LeadTeamLeader]
 GRANT INSERT ON OBJECT::[dbo].[Llamada] TO [LeadTeamLeader]
 GRANT UPDATE ON OBJECT::[dbo].[Llamada] TO [LeadTeamLeader]
 --Permisos en la tabla OPS
+GRANT SELECT ON OBJECT::[dbo].[Operaciones] TO [LeadTeamLeader]
 GRANT INSERT ON OBJECT::[dbo].[Operaciones] TO [LeadTeamLeader]
 GRANT UPDATE ON OBJECT::[dbo].[Operaciones] TO [LeadTeamLeader]
 --Permisos en la tabla QA
+GRANT SELECT ON OBJECT::[dbo].[QA] TO [LeadTeamLeader]
 GRANT INSERT ON OBJECT::[dbo].[QA] TO [LeadTeamLeader]
 GRANT UPDATE ON OBJECT::[dbo].[QA] TO [LeadTeamLeader]
 --Permisos en la tabla ReporteOPS
+GRANT SELECT ON OBJECT::[dbo].[ReporteOPS] TO [LeadTeamLeader]
 GRANT INSERT ON OBJECT::[dbo].[ReporteOPS] TO [LeadTeamLeader]
 GRANT UPDATE ON OBJECT::[dbo].[ReporteOPS] TO [LeadTeamLeader]
 --Permisos en la tabla TipoRCP
+GRANT SELECT ON OBJECT::[dbo].[TipoRCP] TO [LeadTeamLeader]
 GRANT INSERT ON OBJECT::[dbo].[TipoRCP] TO [LeadTeamLeader]
 GRANT UPDATE ON OBJECT::[dbo].[TipoRCP] TO [LeadTeamLeader]
 
@@ -459,8 +467,9 @@ GO
 ALTER ROLE [Lector] ADD MEMBER [Interprete]
 GO
 --Permisos en la tabla Llamada y RCP
-GRANT SELECT ON OBJECT::[dbo].[Llamada] TO [Interprete]
+GRANT SELECT ON OBJECT::[dbo].[RCP] TO [Interprete]
 GRANT INSERT ON OBJECT::[dbo].[RCP] TO [Interprete]
+GRANT SELECT ON OBJECT::[dbo].[Llamada] TO [Interprete]
 GRANT INSERT ON OBJECT::[dbo].[Llamada] TO [Interprete]
 GRANT UPDATE ON OBJECT::[dbo].[Llamada] TO [Interprete]
 
@@ -859,7 +868,7 @@ GO
 -----------------------------------------------------------------
 --Creacion Procedimiento para registro de llamadas atendidass
 -----------------------------------------------------------------
-DROP PROC IF EXISTS registroLlamadasAtendidas_vw
+DROP VIEW IF EXISTS registroLlamadasAtendidas_vw
 GO
 
 CREATE VIEW registroLlamadasAtendidas_vw
@@ -1162,3 +1171,5 @@ EXEC MostrarMenu_sp
 --EXEC MenuEjecutable_sp 
 
 GO
+
+EXEC MenuEjecutable_sp 6
