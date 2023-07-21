@@ -696,6 +696,19 @@ END
 GO
 
 -----------------------------------------------------------------
+--Creacion Procedimiento para obtención de CRID
+-----------------------------------------------------------------
+DROP VIEW IF EXISTS registroCRID_vw
+GO
+
+CREATE VIEW registroCRID_vw
+
+AS
+    SELECT I.interpreteID,I.CRID,I.horario,E.nombre + ' ' + E.apellido AS 'Nombre completo' FROM Interprete I
+    INNER JOIN Empleado E ON I.CRID=E.CRID
+GO
+
+-----------------------------------------------------------------
 --Creacion Procedimiento para ingreso de TipoRCP
 -----------------------------------------------------------------
 DROP PROC IF EXISTS InsertarTipoRCP_sp
@@ -1247,6 +1260,7 @@ GRANT EXECUTE ON OBJECT::[dbo].[MenuEjecutable_sp] TO QA1
 GRANT EXECUTE ON OBJECT::[dbo].[MostrarMenu_sp] TO QA1
 GRANT SELECT ON OBJECT::[dbo].[evaluacionInterpretacionQA_vw] TO QA1
 GRANT EXECUTE ON OBJECT::[dbo].[ObtenerPromedioCalificacionesPorFecha_sp] TO QA1
+GRANT SELECT ON OBJECT::[dbo].[registroCRID_vw] TO QA1
 
 --Permisos de uso de Objetos Programables
 GRANT EXECUTE ON OBJECT::[dbo].[calificacionPorInterprete_sp] TO [LeadTeamLeader]
@@ -1268,6 +1282,7 @@ GRANT EXECUTE ON OBJECT::[dbo].[ObtenerPromedioCalificacionesPorFecha_sp] TO [Le
 GRANT SELECT ON OBJECT::[dbo].[evaluacionInterpretacionQA_vw] TO [LeadTeamLeader]
 GRANT SELECT ON OBJECT::[dbo].[registroLlamadasAtendidas_vw] TO [LeadTeamLeader]
 GRANT SELECT ON OBJECT::[dbo].[registroRCP_vw] TO [LeadTeamLeader]
+GRANT SELECT ON OBJECT::[dbo].[registroCRID_vw] TO [LeadTeamLeader]
 
 --Permisos de uso de Objetos Programables
 GRANT EXECUTE ON OBJECT::[dbo].[MenuEjecutable_sp] TO [Interprete]
