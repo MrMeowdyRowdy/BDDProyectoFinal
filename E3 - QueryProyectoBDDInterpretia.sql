@@ -4,9 +4,9 @@
 --	 Chasipanta Pablo
 --	 Ocaña Dennis
 --	 Ramos Xavier
--- Version: 2.0
+-- Version: 2.5
 -- Fecha de creacion: 04/05/2023
--- Fecha de actualizacion: 17/07/2023
+-- Fecha de actualizacion: 20/07/2023
 -----------------------------------------------------------------
 -- Verificaciones y eliminación de contenido
 -- en caso de su existencia 
@@ -1139,6 +1139,30 @@ BEGIN
 END
 
 GO
+
+-----------------------------------------------------------------
+--Creacion Procedimiento para ver promedio de calificacion por fechas por interprete
+-----------------------------------------------------------------
+DROP PROC IF EXISTS ObtenerPromedioCalificacionesPorFecha_sp
+GO
+
+CREATE PROCEDURE ObtenerPromedioCalificacionesPorFecha_sp
+    @crid INT,
+    @fechaInicio DATE,
+    @fechaFin DATE
+AS
+BEGIN
+    SELECT i.interpreteID, i.CRID, e.apellido + ', ' + e.nombre as 'Nombre Completo', i.categoria, i.lenguajesCertificados as 'Lenguajes Certificados', i.habilidadAlcanzada as 'Habilidad Alcanzada', i.NHO,
+           AVG(sq.porcentaje) as 'Promedio Calificacion'
+    FROM Interprete i
+    inner JOIN SesionQA sq ON i.interpreteID = sq.interpreteID
+    inner JOIN QA q ON sq.QAID = q.QAID
+    INNER JOIN Empleado e ON i.CRID = e.CRID
+    WHERE i.CRID = @crid
+    AND sq.fecha >= @fechaInicio
+    AND sq.fecha <= @fechaFin
+    GROUP BY i.interpreteID, i.CRID, e.apellido, e.nombre, i.categoria, i.lenguajesCertificados, i.habilidadAlcanzada, i.NHO;
+END
 
 -----------------------------------------------------------------
 --Creacion Procedimiento para ejecutar opciones del menú
